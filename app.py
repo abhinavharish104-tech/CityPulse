@@ -15,12 +15,15 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
+import pydeck as pdk
+import streamlit.components.v1 as components
 import streamlit as st
 from plotly.subplots import make_subplots
 from sklearn.ensemble import IsolationForest
 
 import citypulse_core as cc
 import cp_llm
+import cp_recorder
 import cp_ui as ui
 
 st.set_page_config(page_title="CityPulse — Jaipur", page_icon="💗", layout="wide",
@@ -133,10 +136,6 @@ if "t" in st.query_params and not ss.get("_qp_done"):
     except Exception:
         pass
     ss._qp_done = True
-if ss.playing:
-    ss.t_idx = (ss.t_idx + ss.get("speed", 1)) % N
-
-
 def jump_to(ts):
     i = int(np.searchsorted(np.array(TS, dtype="datetime64[ns]"), np.datetime64(pd.Timestamp(ts))))
     ss.t_idx = int(np.clip(i, 0, N - 1))
@@ -218,11 +217,26 @@ V["pulse_v"] = cc.pulse_from_hybrid(V.h, THR)
 feeds_live = [f for f in cc.FEATURES if f != outage]
 
 # =============================================================================== time control
-st.select_slider("Replay time", options=list(range(N)), key="t_idx",
+PLAY_EVERY = 1.0  # seconds between ticks while the week plays
+
+
+def _slider_moved():
+    ss.t_idx = ss.t_slider
+
+
+if not ss.playing:
+    ss.t_slider = ss.t_idx
+st.select_slider("Replay time", options=list(range(N)), key="t_slider", on_change=_slider_moved,
                  format_func=lambda i: pd.Timestamp(TS[i]).strftime("%a %d %b %Y, %H:%M"),
-                 label_visibility="collapsed")
-NOW = pd.Timestamp(TS[ss.t_idx])
-snap = V[V.timestamp == NOW].set_index("zone_id").loc[ZONES.zone_id]
+                 label_visibility="collapsed", disabled=ss.playing)
+
+
+def snap_at(i):
+    now = pd.Timestamp(TS[i])
+    return now, V[V.timestamp == now].set_index("zone_id").loc[ZONES.zone_id]
+
+
+NOW, snap = snap_at(ss.t_idx)
 
 
 # =============================================================================== summaries
@@ -267,8 +281,9 @@ def template_summary(snap, lang):
     return head, sub, state
 
 
-def snapshot_facts(snap):
-    return dict(time=f"{NOW:%A %d %B %Y, %H:%M}", feeds_available=feeds_live,
+def snapshot_facts(snap, now=None):
+    now = now if now is not None else NOW
+    return dict(time=f"{now:%A %d %B %Y, %H:%M}", feeds_available=feeds_live,
                 zones=[dict(zone=ZNAME[z], status=ui.STATE_WORD[r.st_v], pulse=int(r.pulse_v),
                             unusual_feeds=[dict(feed=cc.NAMES[f], now=round(float(r[f]), 1),
                                                 usual_for_this_hour=round(float(r[f + "_typical"]), 1))
@@ -286,89 +301,102 @@ def ai_text(kind: str, task: str, facts: dict, max_tokens=300):
     return ss.llm_cache[key]
 
 
-head, sub, hstate = template_summary(snap, lang)
-ai_used = False
-if hstate != "Normal":
-    lang_word = "Hindi" if lang == "hi" else "English"
-    txt, status = ai_text("hero", f"In {lang_word}, write ONE short sentence (max 35 words) telling a resident "
-                                  f"what is unusual right now and where. Mention at most two readings with their usual "
-                                  f"value. Frame co-occurring signals as a possible link.", snapshot_facts(snap))
-    if txt:
-        sub, ai_used = txt, True
+def hex_rgb(h, a=255):
+    return [int(h[i:i + 2], 16) for i in (1, 3, 5)] + [a]
 
-city_pulse = int(round(snap.pulse_v.mean()))
-conf = T["feeds_all"] if not outage else T["feeds_some"].format(n=3, c=75)
-st.markdown(ui.hero(head, sub, f"{NOW:%A %d %B, %H:%M}", city_pulse, hstate, conf, ai_used), unsafe_allow_html=True)
-st.markdown(f'<div class="source">Rainfall, temperature and AQI: <b>{ui.esc(META["data_source"])}</b>. '
-            f'Traffic, incidents and all labelled events: <b>simulated</b>.'
-            + (f' <b>{len(ss.reports)} citizen report(s)</b> included.' if ss.reports else "") + '</div>',
-            unsafe_allow_html=True)
 
-# live alert toast
-alert_level = ss.get("alert_level", "Confirmed")
-mine = snap.loc[my_zone]
-if STATE_RANK[mine.st_v] >= STATE_RANK[alert_level] and ss.alert_seen != ss.t_idx:
-    st.toast(f"{ZNAME[my_zone]}: {T['states'][mine.st_v]}. {zone_reason(mine, lang, 1)}", icon="🔔")
-    ss.alert_seen = ss.t_idx
+def city_map(snap):
+    """Native Streamlit map (deck.gl + CARTO dark basemap, no token needed)."""
+    m = snap.reset_index()
+    m["name"] = m.zone_id.map(ZNAME)
+    m["word"] = m.st_v.map(T["states"])
+    m["p"] = m.pulse_v.astype(int)
+    m["r"] = 230 + (100 - m.pulse_v) * 6
+    m["r_halo"] = m["r"] * 2.4
+    m["fill"] = [hex_rgb(ui.STATE[s_]) for s_ in m.st_v]
+    m["halo"] = [hex_rgb(ui.STATE[s_], 0 if s_ == "Normal" else 70) for s_ in m.st_v]
+    # labels above the dot, except where two neighbourhoods sit close together (C-Scheme under Sindhi Camp)
+    m["off"] = [[0, 22] if z == "CS" else [0, -22] for z in m.zone_id]
+    data = m[["lon", "lat", "name", "word", "p", "r", "r_halo", "fill", "halo", "off"]].to_dict("records")
+    layers = [
+        pdk.Layer("ScatterplotLayer", data, get_position=["lon", "lat"], get_radius="r_halo",
+                  get_fill_color="halo", pickable=False),
+        pdk.Layer("ScatterplotLayer", data, get_position=["lon", "lat"], get_radius="r", get_fill_color="fill",
+                  stroked=True, get_line_color=[21, 18, 46, 255], line_width_min_pixels=2, pickable=True),
+        pdk.Layer("TextLayer", data, get_position=["lon", "lat"], get_text="name", get_size=14,
+                  get_color=[237, 232, 247, 255], get_pixel_offset="off", font_weight=700,
+                  outline_width=3, outline_color=[15, 12, 36, 255], font_settings={"sdf": True}),
+    ]
+    deck = pdk.Deck(layers=layers, map_provider="carto", map_style=pdk.map_styles.CARTO_DARK,
+                    initial_view_state=pdk.ViewState(latitude=float((m.lat.min() + m.lat.max()) / 2),
+                                                     longitude=float((m.lon.min() + m.lon.max()) / 2),
+                                                     zoom=11.1, pitch=0),
+                    tooltip={"html": "<b>{name}</b><br/>{word}, pulse {p}",
+                             "style": {"backgroundColor": ui.RAISED, "color": ui.TEXT, "border": f"1px solid {ui.LINE}",
+                                       "borderRadius": "8px", "fontFamily": "Atkinson Hyperlegible, sans-serif"}})
+    st.pydeck_chart(deck, height=400)
+
 
 ops = mode == "City operations"
-tabs = st.tabs(["Right now", "Timeline", "Events", "Why this score", "What if", "Report a problem",
-                "Ask CityPulse", "Alerts", "How it works"])
 
-# =============================================================================== 1. right now
-with tabs[0]:
+
+@st.fragment(run_every=PLAY_EVERY if ss.playing else None)
+def live_board():
+    """Hero + vital monitor + map. While playing only this fragment re-runs, not the page."""
+    if ss.playing:
+        ss.t_idx = (ss.t_idx + ss.get("speed", 1)) % N
+    now, snap = snap_at(ss.t_idx)
+    head, sub, hstate = template_summary(snap, lang)
+    ai_used = False
+    if hstate != "Normal" and not ss.playing:
+        lang_word = "Hindi" if lang == "hi" else "English"
+        txt, status = ai_text("hero", f"In {lang_word}, write ONE short sentence (max 35 words) telling a resident "
+                                      f"what is unusual right now and where. Mention at most two readings with their "
+                                      f"usual value. Frame co-occurring signals as a possible link.",
+                              snapshot_facts(snap, now))
+        if txt:
+            sub, ai_used = txt, True
+    city_pulse = int(round(snap.pulse_v.mean()))
+    conf = T["feeds_all"] if not outage else T["feeds_some"].format(n=3, c=75)
+    when = f"{now:%A %d %B, %H:%M}" + ("   ▶ playing the week" if ss.playing else "")
+    st.markdown(ui.hero(head, sub, when, city_pulse, hstate, conf, ai_used), unsafe_allow_html=True)
+    st.markdown(f'<div class="source">Rainfall, temperature and AQI: <b>{ui.esc(META["data_source"])}</b>. '
+                f'Traffic, incidents and all labelled events: <b>simulated</b>.'
+                + (f' <b>{len(ss.reports)} citizen report(s)</b> included.' if ss.reports else "") + '</div>',
+                unsafe_allow_html=True)
+    mine = snap.loc[my_zone]
+    if STATE_RANK[mine.st_v] >= STATE_RANK[ss.get("alert_level", "Confirmed")] and ss.alert_seen != ss.t_idx:
+        st.toast(f"{ZNAME[my_zone]}: {T['states'][mine.st_v]}. {zone_reason(mine, lang, 1)}", icon="🔔")
+        ss.alert_seen = ss.t_idx
     if True:
-        rows = []
-        for i, (z, r) in enumerate(snap.sort_values("h", ascending=False).iterrows()):
-            rows.append(dict(zone_name=ZNAME[z], pulse=r.pulse_v, state=r.st_v, state_word=T["states"][r.st_v],
-                             why=zone_reason(r, lang), mine=(z == my_zone), seed=sum(map(ord, z))))
+        rows = [dict(zone_name=ZNAME[z], pulse=r.pulse_v, state=r.st_v, state_word=T["states"][r.st_v],
+                     why=zone_reason(r, lang), mine=(z == my_zone), seed=sum(map(ord, z)))
+                for z, r in snap.sort_values("h", ascending=False).iterrows()]
         st.markdown(ui.monitor(rows), unsafe_allow_html=True)
         if outage:
-            st.info(f"{cc.NAMES[outage]} is switched off. Every score above has been re-computed by all three "
-                    f"detectors without it, so the pulse keeps working with slightly less certainty.")
-    left, right = st.columns([1.25, 1], gap="medium")
+            st.caption(f"{cc.NAMES[outage]} is switched off. Every score has been re-computed by all three "
+                       f"detectors without it, so the pulse keeps working with slightly less certainty.")
+    left, right = st.columns([1.35, 1], gap="medium")
     with left:
-        m = snap.reset_index()
-        m["size"] = 16 + (100 - m.pulse_v) * 0.32
-        fig = go.Figure()
-        for stt in ["Normal", "Watch", "Confirmed", "Critical"]:
-            p = m[m.st_v == stt]
-            if p.empty:
-                continue
-            if stt != "Normal":
-                fig.add_trace(go.Scattermap(lat=p.lat, lon=p.lon, mode="markers", hoverinfo="skip",
-                                            marker=dict(size=p["size"] * 2.2, color=ui.STATE[stt], opacity=.22),
-                                            showlegend=False))
-            fig.add_trace(go.Scattermap(
-                lat=p.lat, lon=p.lon, mode="markers+text", text=[ZNAME[z] for z in p.zone_id],
-                textposition="top center", textfont=dict(color=ui.TEXT, size=12),
-                marker=dict(size=p["size"], color=ui.STATE[stt]), name=T["states"][stt],
-                customdata=np.column_stack([p.pulse_v, p.h.round(1)]),
-                hovertemplate="<b>%{text}</b><br>Pulse %{customdata[0]:.0f}<br>Score %{customdata[1]}<extra></extra>"))
-        fig.update_layout(map=dict(style="carto-darkmatter", zoom=11.2,
-                                   center=dict(lat=float(m.lat.mean()), lon=float(m.lon.mean()))),
-                          legend=dict(orientation="h", y=0.02, x=0.02, bgcolor="rgba(21,18,46,.7)"))
-        ui.plotly_theme(fig, 420).update_layout(margin=dict(l=0, r=0, t=0, b=0))
-        st.plotly_chart(fig, width="stretch", config=PLOT_CFG)
+        city_map(snap)
     with right:
-        recent = [e for e in EVENTS if e["start"] <= NOW <= e["end"] + pd.Timedelta(hours=3)]
+        recent = [e for e in EVENTS if e["start"] <= now <= e["end"] + pd.Timedelta(hours=3)]
         st.markdown("#### Last three hours")
         if not recent:
             st.markdown('<div class="tick">No disruptions. Every neighbourhood has stayed within its usual range.</div>',
                         unsafe_allow_html=True)
         for e in recent:
-            live = e["start"] <= NOW <= e["end"]
+            live = now <= e["end"]
             st.markdown(f'<div class="tick" style="border-left:4px solid {ui.STATE[e["peak_state"]]}">'
                         f'<b>{"Ongoing" if live else "Cleared at " + format(e["end"], "%H:%M")}</b><br>'
                         f'{ui.esc(e["pattern"])} in {ui.esc(join_names(e["zone_names"]))}, since {e["start"]:%H:%M}.</div>',
                         unsafe_allow_html=True)
-        nxt_alerts = snap[snap.st_v != "Normal"]
-        st.markdown("#### Neighbourhoods to avoid for now" if len(nxt_alerts) else "#### Getting around")
-        st.markdown(
-            ("".join(f'<div class="tick">{ui.chip(r.st_v)} {ui.esc(ZNAME[z])}: allow extra time.</div>'
-                     for z, r in nxt_alerts.iterrows()))
-            if len(nxt_alerts) else '<div class="tick">Normal travel times expected across the five neighbourhoods.</div>',
-            unsafe_allow_html=True)
+        bad = snap[snap.st_v != "Normal"]
+        st.markdown("#### Allow extra time in" if len(bad) else "#### Getting around")
+        st.markdown(("".join(f'<div class="tick">{ui.chip(r.st_v, T["states"][r.st_v])} {ui.esc(ZNAME[z])}</div>'
+                             for z, r in bad.iterrows())) if len(bad) else
+                    '<div class="tick">Normal travel times expected across all five neighbourhoods.</div>',
+                    unsafe_allow_html=True)
     if ops:
         st.markdown("#### Detector channels at this moment")
         t = snap.reset_index()[["zone_id", "st_v", "h", "stat_score", "iso_score", "lstm_score", "strong_v",
@@ -378,6 +406,14 @@ with tabs[0]:
             "st_v": "state", "h": "hybrid", "stat_score": "statistics", "iso_score": "isolation forest",
             "lstm_score": "LSTM", "strong_v": "channels agreeing", "warning_run": "readings in a row"}).round(3),
             hide_index=True, width="stretch")
+    if ss.playing:
+        st.caption("The week is playing. The tabs below refresh when you pause.")
+
+
+live_board()
+NOW, snap = snap_at(ss.t_idx)
+tabs = st.tabs(["Timeline", "Events", "Why this score", "What if", "Report a problem",
+                "Ask CityPulse", "Alerts", "How it works"])
 
 # =============================================================================== 2. timeline
 FEED_COL = {"rainfall": "#7CB7FF", "traffic_congestion": ui.MARIGOLD, "incidents_30m": ui.ROSE, "aqi": "#B79CFF"}
@@ -391,48 +427,63 @@ def shade_events(fig, zone, t0, t1, rows):
                               fillcolor=ui.STATE[e["peak_state"]], opacity=.13, line_width=0)
 
 
-with tabs[1]:
-    c1, c2 = st.columns([1, 2])
+with tabs[0]:
+    c1, c2, c3 = st.columns([1, 1.1, 1.3])
     tz = c1.selectbox("Neighbourhood", ZONES.zone_id, format_func=ZNAME.get,
                       index=list(ZONES.zone_id).index(snap.h.idxmax() if snap.h.max() >= THR["watch"] else my_zone),
                       key="tl_zone")
-    span = c2.radio("Window", ["6 hours", "24 hours", "Whole week"], horizontal=True, index=1)
-    hrs = {"6 hours": 6, "24 hours": 24}.get(span)
-    t0 = NOW - pd.Timedelta(hours=hrs) if hrs else TS[0]
-    t1 = NOW  # a live replay never shows the future
-    z = V[(V.zone_id == tz) & V.timestamp.between(t0, t1)]
-    fig = make_subplots(rows=5, cols=1, shared_xaxes=True, vertical_spacing=.035,
-                        row_heights=[.16, .16, .16, .16, .36],
-                        subplot_titles=[f"{cc.NAMES[f]} ({cc.UNITS[f]})" for f in cc.FEATURES]
-                        + ["Combined anomaly score and alert levels"])
-    for i, f in enumerate(cc.FEATURES, 1):
-        lo = (z[f + "_typical"] - 2 * z[f + "_sigma"]).clip(lower=0)
-        hi = z[f + "_typical"] + 2 * z[f + "_sigma"]
-        fig.add_trace(go.Scatter(x=z.timestamp, y=hi, line=dict(width=0), showlegend=False, hoverinfo="skip"), i, 1)
-        fig.add_trace(go.Scatter(x=z.timestamp, y=lo, fill="tonexty", fillcolor="rgba(166,159,199,.12)",
-                                 line=dict(width=0), name="usual range", showlegend=(i == 1), hoverinfo="skip"), i, 1)
-        fig.add_trace(go.Scatter(x=z.timestamp, y=z[f + "_typical"], line=dict(color=ui.MUTED, dash="dot", width=1),
-                                 name="typical for the hour", showlegend=(i == 1)), i, 1)
-        dim = f == outage
-        fig.add_trace(go.Scatter(x=z.timestamp, y=z[f], line=dict(color=ui.MUTED if dim else FEED_COL[f], width=2,
-                                                                  dash="dash" if dim else "solid"),
-                                 name=cc.NAMES[f] + (" (offline)" if dim else ""), showlegend=False), i, 1)
-    for lo_, hi_, stt in [(THR["watch"], THR["confirmed"], "Watch"), (THR["confirmed"], THR["critical"], "Confirmed"),
-                          (THR["critical"], 100, "Critical")]:
-        fig.add_hrect(y0=lo_, y1=hi_, row=5, col=1, fillcolor=ui.STATE[stt], opacity=.08, line_width=0)
-    fig.add_trace(go.Scatter(x=z.timestamp, y=z.h, line=dict(color=ui.TEXT, width=2), name="combined score",
-                             showlegend=False), 5, 1)
-    flagged = z[z.st_v != "Normal"]
-    fig.add_trace(go.Scatter(x=flagged.timestamp, y=flagged.h, mode="markers", showlegend=False,
-                             marker=dict(color=[ui.STATE[s] for s in flagged.st_v], size=7),
-                             text=flagged.st_v, hovertemplate="%{text} %{y:.0f}<extra></extra>"), 5, 1)
-    shade_events(fig, tz, t0, t1, rows=range(1, 6))
-    for r in range(1, 6):
-        fig.add_vline(x=NOW, line=dict(color=ui.MARIGOLD, width=1.5), row=r, col=1)
-    fig.update_yaxes(range=[0, 100], row=5, col=1)
-    ui.plotly_theme(fig, 760).update_layout(legend=dict(orientation="h", y=1.06), hovermode="x unified")
-    fig.update_annotations(font=dict(size=13, color=ui.MUTED), x=0, xanchor="left")
-    st.plotly_chart(fig, width="stretch", config=PLOT_CFG)
+    view = c2.radio("View", ["Live recorder", "Full chart"], horizontal=True, key="tl_view")
+    span = c3.radio("Window", ["6 hours", "24 hours", "Whole week"], horizontal=True, index=1,
+                    disabled=view == "Live recorder")
+    if view == "Live recorder":
+        st.caption(f"Readings for {ZNAME[tz]} are drawn one by one from six hours before {NOW:%a %H:%M}, the way a "
+                   f"monitor records them. Use pause, speed and 6 h back inside the recorder.")
+        zd = V[V.zone_id == tz]
+        data = cp_recorder.payload(zd, ZNAME[tz], NOW, THR, [e for e in EVENTS if tz in e["zone_ids"]],
+                                   T["states"], outage)
+        html_doc = cp_recorder.recorder_html(data)
+        if hasattr(st, "iframe"):          # Streamlit >= 1.52
+            st.iframe(html_doc, height=800)
+        else:
+            components.html(html_doc, height=800, scrolling=False)
+with tabs[0]:
+    if view == "Full chart":
+        hrs = {"6 hours": 6, "24 hours": 24}.get(span)
+        t0 = NOW - pd.Timedelta(hours=hrs) if hrs else TS[0]
+        t1 = NOW  # a live replay never shows the future
+        z = V[(V.zone_id == tz) & V.timestamp.between(t0, t1)]
+        fig = make_subplots(rows=5, cols=1, shared_xaxes=True, vertical_spacing=.035,
+                            row_heights=[.16, .16, .16, .16, .36],
+                            subplot_titles=[f"{cc.NAMES[f]} ({cc.UNITS[f]})" for f in cc.FEATURES]
+                            + ["Combined anomaly score and alert levels"])
+        for i, f in enumerate(cc.FEATURES, 1):
+            lo = (z[f + "_typical"] - 2 * z[f + "_sigma"]).clip(lower=0)
+            hi = z[f + "_typical"] + 2 * z[f + "_sigma"]
+            fig.add_trace(go.Scatter(x=z.timestamp, y=hi, line=dict(width=0), showlegend=False, hoverinfo="skip"), i, 1)
+            fig.add_trace(go.Scatter(x=z.timestamp, y=lo, fill="tonexty", fillcolor="rgba(166,159,199,.12)",
+                                     line=dict(width=0), name="usual range", showlegend=(i == 1), hoverinfo="skip"), i, 1)
+            fig.add_trace(go.Scatter(x=z.timestamp, y=z[f + "_typical"], line=dict(color=ui.MUTED, dash="dot", width=1),
+                                     name="typical for the hour", showlegend=(i == 1)), i, 1)
+            dim = f == outage
+            fig.add_trace(go.Scatter(x=z.timestamp, y=z[f], line=dict(color=ui.MUTED if dim else FEED_COL[f], width=2,
+                                                                      dash="dash" if dim else "solid"),
+                                     name=cc.NAMES[f] + (" (offline)" if dim else ""), showlegend=False), i, 1)
+        for lo_, hi_, stt in [(THR["watch"], THR["confirmed"], "Watch"), (THR["confirmed"], THR["critical"], "Confirmed"),
+                              (THR["critical"], 100, "Critical")]:
+            fig.add_hrect(y0=lo_, y1=hi_, row=5, col=1, fillcolor=ui.STATE[stt], opacity=.08, line_width=0)
+        fig.add_trace(go.Scatter(x=z.timestamp, y=z.h, line=dict(color=ui.TEXT, width=2), name="combined score",
+                                 showlegend=False), 5, 1)
+        flagged = z[z.st_v != "Normal"]
+        fig.add_trace(go.Scatter(x=flagged.timestamp, y=flagged.h, mode="markers", showlegend=False,
+                                 marker=dict(color=[ui.STATE[s] for s in flagged.st_v], size=7),
+                                 text=flagged.st_v, hovertemplate="%{text} %{y:.0f}<extra></extra>"), 5, 1)
+        shade_events(fig, tz, t0, t1, rows=range(1, 6))
+        for r in range(1, 6):
+            fig.add_vline(x=NOW, line=dict(color=ui.MARIGOLD, width=1.5), row=r, col=1)
+        fig.update_yaxes(range=[0, 100], row=5, col=1)
+        ui.plotly_theme(fig, 760).update_layout(legend=dict(orientation="h", y=1.06), hovermode="x unified")
+        fig.update_annotations(font=dict(size=13, color=ui.MUTED), x=0, xanchor="left")
+        st.plotly_chart(fig, width="stretch", config=PLOT_CFG)
 
     st.markdown("#### Every neighbourhood across the week")
     hm = V.pivot_table(index="zone_id", columns="timestamp", values="pulse_v").loc[list(ZONES.zone_id[::-1])]
@@ -489,7 +540,7 @@ def event_markdown(e):
     return "\n".join(lines)
 
 
-with tabs[2]:
+with tabs[1]:
     c1, c2 = st.columns([2, 1])
     show_all = c2.toggle("Show the whole week", value=False, help="Off: only events up to the replay time.")
     evs = [e for e in EVENTS if show_all or e["start"] <= NOW]
@@ -563,7 +614,7 @@ with tabs[2]:
                          "peak_time": str(e["peak_time"]), "confirmed_at": str(e["confirmed_at"])})
 
 # =============================================================================== 4. why this score
-with tabs[3]:
+with tabs[2]:
     wz = st.selectbox("Neighbourhood", ZONES.zone_id, format_func=ZNAME.get,
                       index=list(ZONES.zone_id).index(snap.h.idxmax()), key="why_zone")
     r = snap.loc[wz]
@@ -623,7 +674,7 @@ with tabs[3]:
                         f"({100 * lf[top_f] / sum(lf.values()):.0f}% of its reconstruction error).")
 
 # =============================================================================== 5. what if
-with tabs[4]:
+with tabs[3]:
     st.markdown('<div class="big-note">Move the readings and watch the detectors respond</div>',
                 unsafe_allow_html=True)
     wz2 = st.selectbox("Neighbourhood", ZONES.zone_id, format_func=ZNAME.get,
@@ -672,7 +723,7 @@ CATS = {"Accident or crash": 2, "Waterlogging or flooded road": 2, "Traffic sign
         "Smoke, burning or bad air": 1, "Fallen tree or blocked road": 2, "Something else": 1}
 PII = re.compile(r"(\b\d{10}\b|\+91[\s-]?\d{5}[\s-]?\d{5}|[\w.+-]+@[\w-]+\.[\w.]+)")
 
-with tabs[5]:
+with tabs[4]:
     st.markdown('<div class="big-note">Seen something? Tell the city.</div>', unsafe_allow_html=True)
     st.markdown("Your report is added to the road-incident feed for that neighbourhood at the current replay time, "
                 "and all detectors re-score it. You can watch it move the pulse.")
@@ -734,7 +785,7 @@ def fallback_answer(q: str) -> str:
     return " ".join(out)
 
 
-with tabs[6]:
+with tabs[5]:
     st.markdown('<div class="big-note">Ask about any neighbourhood, event or the method</div>', unsafe_allow_html=True)
     sugg = ["Is it a good time to drive through Sindhi Camp?", "What happened this week?",
             "Why is the top neighbourhood flagged?", "How does CityPulse decide?"]
@@ -771,7 +822,7 @@ with tabs[6]:
         st.rerun()
 
 # =============================================================================== 8. alerts
-with tabs[7]:
+with tabs[6]:
     st.markdown('<div class="big-note">Get told before you get stuck</div>', unsafe_allow_html=True)
     c1, c2 = st.columns([2, 1])
     subs = c1.multiselect("Neighbourhoods to follow", ZONES.zone_id, default=[my_zone], format_func=ZNAME.get)
@@ -801,7 +852,7 @@ with tabs[7]:
                "chose. In production this would be an SMS, WhatsApp or push message.")
 
 # =============================================================================== 9. how it works
-with tabs[8]:
+with tabs[7]:
     mt = META["metrics"]["test"]
     ev = mt["events"]
     st.markdown('<div class="flow"><span>4 live feeds</span><i>→</i><span>one table, every 5 min, per neighbourhood</span>'
@@ -864,7 +915,3 @@ with tabs[8]:
         {k: META[k] for k in ["version", "data_source", "weights", "thresholds", "calibration", "split", "metrics",
                               "scenarios", "note"]}, indent=2, default=str), "citypulse_model_card.json")
 
-# =============================================================================== autoplay
-if ss.playing:
-    time.sleep(0.7)
-    st.rerun()
