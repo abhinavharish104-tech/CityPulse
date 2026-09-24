@@ -1,0 +1,418 @@
+[
+  {
+    "start": "2026-09-22 11:10:00",
+    "end": "2026-09-22 11:50:00",
+    "zone_ids": [
+      "CS"
+    ],
+    "zone_names": [
+      "C-Scheme"
+    ],
+    "peak_time": "2026-09-22 11:25:00",
+    "peak_zone": "CS",
+    "peak_hybrid": 83.2,
+    "peak_state": "Critical",
+    "severity": 64.9,
+    "duration_min": 45,
+    "components": {
+      "magnitude": 0.832,
+      "spread": 0.333,
+      "duration": 0.5,
+      "agreement": 0.667
+    },
+    "channels": {
+      "stat": 1.0,
+      "iso": 0.667,
+      "lstm": 0.316
+    },
+    "lstm_feed_share": {
+      "rainfall": 0.005,
+      "traffic_congestion": 0.629,
+      "incidents_30m": 0.346,
+      "aqi": 0.019
+    },
+    "z_scores": {
+      "rainfall": -0.04,
+      "traffic_congestion": 6.89,
+      "incidents_30m": 7.33,
+      "aqi": 3.07
+    },
+    "evidence": [
+      {
+        "feed": "incidents_30m",
+        "value": 13.0,
+        "typical": 2.0,
+        "z": 7.333333333333333
+      },
+      {
+        "feed": "traffic_congestion",
+        "value": 67.84119961201377,
+        "typical": 31.626132929558196,
+        "z": 6.8855736243171775
+      },
+      {
+        "feed": "aqi",
+        "value": 133.0713824350097,
+        "typical": 90.07663830817728,
+        "z": 3.06616414427226
+      }
+    ],
+    "pattern": "Air-quality spike with road disruption",
+    "confirmed_at": "2026-09-22 11:15:00",
+    "split": "val",
+    "matches_injected_scenario": "S1_traffic_incident_cluster",
+    "event_id": "EV001"
+  },
+  {
+    "start": "2026-09-22 18:00:00",
+    "end": "2026-09-22 19:00:00",
+    "zone_ids": [
+      "MN",
+      "MS"
+    ],
+    "zone_names": [
+      "Malviya Nagar",
+      "Mansarovar"
+    ],
+    "peak_time": "2026-09-22 18:15:00",
+    "peak_zone": "MS",
+    "peak_hybrid": 91.4,
+    "peak_state": "Critical",
+    "severity": 85.0,
+    "duration_min": 65,
+    "components": {
+      "magnitude": 0.914,
+      "spread": 0.667,
+      "duration": 0.722,
+      "agreement": 0.986
+    },
+    "channels": {
+      "stat": 1.0,
+      "iso": 0.748,
+      "lstm": 0.897
+    },
+    "lstm_feed_share": {
+      "rainfall": 0.434,
+      "traffic_congestion": 0.418,
+      "incidents_30m": 0.137,
+      "aqi": 0.01
+    },
+    "z_scores": {
+      "rainfall": 44.72,
+      "traffic_congestion": 8.07,
+      "incidents_30m": 13.33,
+      "aqi": 0.56
+    },
+    "evidence": [
+      {
+        "feed": "rainfall",
+        "value": 22.358683596046944,
+        "typical": 0.0,
+        "z": 44.71736719209389
+      },
+      {
+        "feed": "incidents_30m",
+        "value": 23.0,
+        "typical": 3.0,
+        "z": 13.333333333333334
+      },
+      {
+        "feed": "traffic_congestion",
+        "value": 93.01244040738288,
+        "typical": 60.719350605826584,
+        "z": 8.073272450389075
+      }
+    ],
+    "pattern": "Heavy rain with traffic disruption",
+    "confirmed_at": "2026-09-22 18:05:00",
+    "split": "val",
+    "matches_injected_scenario": "A_flood_disruption",
+    "event_id": "EV002"
+  },
+  {
+    "start": "2026-09-23 20:05:00",
+    "end": "2026-09-23 21:05:00",
+    "zone_ids": [
+      "SC"
+    ],
+    "zone_names": [
+      "Sindhi Camp"
+    ],
+    "peak_time": "2026-09-23 20:55:00",
+    "peak_zone": "SC",
+    "peak_hybrid": 80.5,
+    "peak_state": "Confirmed",
+    "severity": 67.1,
+    "duration_min": 65,
+    "components": {
+      "magnitude": 0.805,
+      "spread": 0.333,
+      "duration": 0.722,
+      "agreement": 0.667
+    },
+    "channels": {
+      "stat": 1.0,
+      "iso": 0.583,
+      "lstm": 0.305
+    },
+    "lstm_feed_share": {
+      "rainfall": 0.001,
+      "traffic_congestion": 0.098,
+      "incidents_30m": 0.717,
+      "aqi": 0.184
+    },
+    "z_scores": {
+      "rainfall": 0.0,
+      "traffic_congestion": -0.9,
+      "incidents_30m": 8.67,
+      "aqi": -0.03
+    },
+    "evidence": [
+      {
+        "feed": "incidents_30m",
+        "value": 17.0,
+        "typical": 4.0,
+        "z": 8.666666666666666
+      }
+    ],
+    "pattern": "Cluster of road incidents",
+    "confirmed_at": "2026-09-23 20:10:00",
+    "split": "test",
+    "matches_injected_scenario": "B_incident_cluster_aqi",
+    "event_id": "EV003"
+  },
+  {
+    "start": "2026-09-24 09:10:00",
+    "end": "2026-09-24 10:00:00",
+    "zone_ids": [
+      "MS",
+      "VN"
+    ],
+    "zone_names": [
+      "Mansarovar",
+      "Vaishali Nagar"
+    ],
+    "peak_time": "2026-09-24 09:40:00",
+    "peak_zone": "VN",
+    "peak_hybrid": 90.2,
+    "peak_state": "Critical",
+    "severity": 83.1,
+    "duration_min": 55,
+    "components": {
+      "magnitude": 0.902,
+      "spread": 0.667,
+      "duration": 0.611,
+      "agreement": 1.0
+    },
+    "channels": {
+      "stat": 1.0,
+      "iso": 0.728,
+      "lstm": 0.837
+    },
+    "lstm_feed_share": {
+      "rainfall": 0.511,
+      "traffic_congestion": 0.432,
+      "incidents_30m": 0.048,
+      "aqi": 0.009
+    },
+    "z_scores": {
+      "rainfall": 38.86,
+      "traffic_congestion": 6.8,
+      "incidents_30m": 4.67,
+      "aqi": 0.19
+    },
+    "evidence": [
+      {
+        "feed": "rainfall",
+        "value": 19.43099383004654,
+        "typical": 0.0,
+        "z": 38.86198766009308
+      },
+      {
+        "feed": "traffic_congestion",
+        "value": 84.37331088582621,
+        "typical": 57.1727699313552,
+        "z": 6.800135238617754
+      },
+      {
+        "feed": "incidents_30m",
+        "value": 9.0,
+        "typical": 2.0,
+        "z": 4.666666666666667
+      }
+    ],
+    "pattern": "Heavy rain with traffic disruption",
+    "confirmed_at": "2026-09-24 09:15:00",
+    "split": "test",
+    "matches_injected_scenario": "S3_waterlogging",
+    "event_id": "EV004"
+  },
+  {
+    "start": "2026-09-24 16:50:00",
+    "end": "2026-09-24 17:00:00",
+    "zone_ids": [
+      "CS"
+    ],
+    "zone_names": [
+      "C-Scheme"
+    ],
+    "peak_time": "2026-09-24 16:55:00",
+    "peak_zone": "CS",
+    "peak_hybrid": 76.9,
+    "peak_state": "Confirmed",
+    "severity": 54.9,
+    "duration_min": 15,
+    "components": {
+      "magnitude": 0.769,
+      "spread": 0.333,
+      "duration": 0.167,
+      "agreement": 0.556
+    },
+    "channels": {
+      "stat": 1.0,
+      "iso": 0.551,
+      "lstm": 0.04
+    },
+    "lstm_feed_share": {
+      "rainfall": 0.014,
+      "traffic_congestion": 0.022,
+      "incidents_30m": 0.521,
+      "aqi": 0.443
+    },
+    "z_scores": {
+      "rainfall": -0.05,
+      "traffic_congestion": 0.89,
+      "incidents_30m": 5.0,
+      "aqi": 3.95
+    },
+    "evidence": [
+      {
+        "feed": "incidents_30m",
+        "value": 10.0,
+        "typical": 2.5,
+        "z": 5.0
+      },
+      {
+        "feed": "aqi",
+        "value": 242.99016970900814,
+        "typical": 122.58273281847788,
+        "z": 3.9495068037709533
+      }
+    ],
+    "pattern": "Air-quality spike with road disruption",
+    "confirmed_at": "2026-09-24 16:55:00",
+    "split": "test",
+    "matches_injected_scenario": "S4_smog_buildup",
+    "event_id": "EV005"
+  },
+  {
+    "start": "2026-09-24 20:00:00",
+    "end": "2026-09-24 20:10:00",
+    "zone_ids": [
+      "MS"
+    ],
+    "zone_names": [
+      "Mansarovar"
+    ],
+    "peak_time": "2026-09-24 20:05:00",
+    "peak_zone": "MS",
+    "peak_hybrid": 76.2,
+    "peak_state": "Confirmed",
+    "severity": 54.6,
+    "duration_min": 15,
+    "components": {
+      "magnitude": 0.762,
+      "spread": 0.333,
+      "duration": 0.167,
+      "agreement": 0.556
+    },
+    "channels": {
+      "stat": 1.0,
+      "iso": 0.534,
+      "lstm": 0.018
+    },
+    "lstm_feed_share": {
+      "rainfall": 0.001,
+      "traffic_congestion": 0.443,
+      "incidents_30m": 0.396,
+      "aqi": 0.16
+    },
+    "z_scores": {
+      "rainfall": 0.0,
+      "traffic_congestion": 0.95,
+      "incidents_30m": 5.33,
+      "aqi": 1.66
+    },
+    "evidence": [
+      {
+        "feed": "incidents_30m",
+        "value": 10.0,
+        "typical": 2.0,
+        "z": 5.333333333333333
+      }
+    ],
+    "pattern": "Cluster of road incidents",
+    "confirmed_at": "2026-09-24 20:05:00",
+    "split": "test",
+    "matches_injected_scenario": null,
+    "event_id": "EV006"
+  },
+  {
+    "start": "2026-09-24 22:25:00",
+    "end": "2026-09-24 22:45:00",
+    "zone_ids": [
+      "MN"
+    ],
+    "zone_names": [
+      "Malviya Nagar"
+    ],
+    "peak_time": "2026-09-24 22:40:00",
+    "peak_zone": "MN",
+    "peak_hybrid": 80.3,
+    "peak_state": "Confirmed",
+    "severity": 56.3,
+    "duration_min": 25,
+    "components": {
+      "magnitude": 0.803,
+      "spread": 0.333,
+      "duration": 0.278,
+      "agreement": 0.467
+    },
+    "channels": {
+      "stat": 1.0,
+      "iso": 0.604,
+      "lstm": 0.219
+    },
+    "lstm_feed_share": {
+      "rainfall": 0.021,
+      "traffic_congestion": 0.813,
+      "incidents_30m": 0.134,
+      "aqi": 0.032
+    },
+    "z_scores": {
+      "rainfall": 0.0,
+      "traffic_congestion": 11.92,
+      "incidents_30m": 4.0,
+      "aqi": 1.1
+    },
+    "evidence": [
+      {
+        "feed": "traffic_congestion",
+        "value": 70.8835961078847,
+        "typical": 23.213245519944735,
+        "z": 11.917587646984991
+      },
+      {
+        "feed": "incidents_30m",
+        "value": 8.0,
+        "typical": 2.0,
+        "z": 4.0
+      }
+    ],
+    "pattern": "Traffic and incident cluster",
+    "confirmed_at": "2026-09-24 22:40:00",
+    "split": "test",
+    "matches_injected_scenario": "S5_signal_failure_gridlock",
+    "event_id": "EV007"
+  }
+]

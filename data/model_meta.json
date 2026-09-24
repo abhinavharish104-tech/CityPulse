@@ -1,0 +1,3318 @@
+{
+  "version": "3.0",
+  "generated": "2026-09-24 17:47",
+  "data_source": "Open-Meteo (real rainfall, temperature and AQI)",
+  "simulated": [
+    "traffic_congestion",
+    "incident_count",
+    "all labelled events and decoys"
+  ],
+  "zones": [
+    {
+      "zone_id": "CS",
+      "zone_name": "C-Scheme",
+      "lat": 26.9075,
+      "lon": 75.8
+    },
+    {
+      "zone_id": "MN",
+      "zone_name": "Malviya Nagar",
+      "lat": 26.854,
+      "lon": 75.818
+    },
+    {
+      "zone_id": "MS",
+      "zone_name": "Mansarovar",
+      "lat": 26.849,
+      "lon": 75.762
+    },
+    {
+      "zone_id": "SC",
+      "zone_name": "Sindhi Camp",
+      "lat": 26.9195,
+      "lon": 75.7997
+    },
+    {
+      "zone_id": "VN",
+      "zone_name": "Vaishali Nagar",
+      "lat": 26.9124,
+      "lon": 75.7273
+    }
+  ],
+  "split": {
+    "train_end": "2026-09-22 04:15:00",
+    "val_end": "2026-09-23 13:40:00",
+    "rule": "chronological 60/20/20 by timestamp"
+  },
+  "weights": {
+    "stat": 0.6,
+    "iso": 0.3,
+    "lstm": 0.1
+  },
+  "thresholds": {
+    "watch": 66.5,
+    "confirmed": 69.0,
+    "critical": 80.6
+  },
+  "strong_channel": 0.5,
+  "calibration": {
+    "iso_lo": -0.07904299493715164,
+    "iso_hi": 0.16235347681835297,
+    "lstm_lo": 0.021451025334499718,
+    "lstm_hi": 4.356315902057093,
+    "fitted_on": "validation rows with no labelled event"
+  },
+  "iso_params": {
+    "n_estimators": 300,
+    "max_samples": 512,
+    "random_state": 42
+  },
+  "lstm": {
+    "seq_len": 12,
+    "tail": 3,
+    "epochs": 60,
+    "final_val_loss": 0.005787143483757973,
+    "architecture": "LSTM 48-16 | 16-48 autoencoder"
+  },
+  "refs": {
+    "rainfall": {
+      "table": [
+        {
+          "zone_id": "CS",
+          "hour": 0,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 1,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 2,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 3,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 4,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 5,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 6,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 7,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 8,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 9,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 10,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 11,
+          "median": 0.021127317899368052,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 12,
+          "median": 0.08800682030901999,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 13,
+          "median": 0.08013830557637705,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 14,
+          "median": 0.06345860448460094,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 15,
+          "median": 0.0889327387467328,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 16,
+          "median": 0.02316405697800595,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 17,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 18,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 19,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 20,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 21,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 22,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 23,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 0,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 1,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 2,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 3,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 4,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 5,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 6,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 7,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 8,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 9,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 10,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 11,
+          "median": 0.020590642923541402,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 12,
+          "median": 0.0854221890126787,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 13,
+          "median": 0.0810018760604542,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 14,
+          "median": 0.0567272823173665,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 15,
+          "median": 0.08445923413807195,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 16,
+          "median": 0.0221027826220025,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 17,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 18,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 19,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 20,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 21,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 22,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 23,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 0,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 1,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 2,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 3,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 4,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 5,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 6,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 7,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 8,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 9,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 10,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 11,
+          "median": 0.021690606701670098,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 12,
+          "median": 0.08678718960154569,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 13,
+          "median": 0.08700973500416295,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 14,
+          "median": 0.052925197353667804,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 15,
+          "median": 0.08453598868387169,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 16,
+          "median": 0.0208764240069959,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 17,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 18,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 19,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 20,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 21,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 22,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 23,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 0,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 1,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 2,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 3,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 4,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 5,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 6,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 7,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 8,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 9,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 10,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 11,
+          "median": 0.0206456931831873,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 12,
+          "median": 0.08645955985817275,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 13,
+          "median": 0.08258893772590015,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 14,
+          "median": 0.056058942617885604,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 15,
+          "median": 0.08963512820212585,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 16,
+          "median": 0.01998557340822945,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 17,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 18,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 19,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 20,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 21,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 22,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 23,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 0,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 1,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 2,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 3,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 4,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 5,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 6,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 7,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 8,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 9,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 10,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 11,
+          "median": 0.020034323355645853,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 12,
+          "median": 0.09096838920390905,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 13,
+          "median": 0.07322043656303405,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 14,
+          "median": 0.0581082111119545,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 15,
+          "median": 0.0819393080640905,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 16,
+          "median": 0.022429594724860148,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 17,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 18,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 19,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 20,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 21,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 22,
+          "median": 0.0,
+          "sigma": 0.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 23,
+          "median": 0.0,
+          "sigma": 0.5
+        }
+      ],
+      "global_median": 0.0,
+      "global_sigma": 0.5
+    },
+    "traffic_congestion": {
+      "table": [
+        {
+          "zone_id": "CS",
+          "hour": 0,
+          "median": 23.827217196121214,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "CS",
+          "hour": 1,
+          "median": 24.083407891098872,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "CS",
+          "hour": 2,
+          "median": 24.629518488191867,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "CS",
+          "hour": 3,
+          "median": 23.612169373870877,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "CS",
+          "hour": 4,
+          "median": 25.08473141209555,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "CS",
+          "hour": 5,
+          "median": 25.523820246980975,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "CS",
+          "hour": 6,
+          "median": 28.45866272116497,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "CS",
+          "hour": 7,
+          "median": 43.0948558061575,
+          "sigma": 8.241101115665513
+        },
+        {
+          "zone_id": "CS",
+          "hour": 8,
+          "median": 64.516610277308,
+          "sigma": 5.701991701039511
+        },
+        {
+          "zone_id": "CS",
+          "hour": 9,
+          "median": 66.14380393426455,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "CS",
+          "hour": 10,
+          "median": 48.01435287631132,
+          "sigma": 8.374735818089974
+        },
+        {
+          "zone_id": "CS",
+          "hour": 11,
+          "median": 31.626132929558196,
+          "sigma": 5.259556960448145
+        },
+        {
+          "zone_id": "CS",
+          "hour": 12,
+          "median": 25.269449210133395,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "CS",
+          "hour": 13,
+          "median": 24.28195891504738,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "CS",
+          "hour": 14,
+          "median": 26.723671817720252,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "CS",
+          "hour": 15,
+          "median": 29.86259861842872,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "CS",
+          "hour": 16,
+          "median": 39.733578864908075,
+          "sigma": 7.326188666470514
+        },
+        {
+          "zone_id": "CS",
+          "hour": 17,
+          "median": 61.90444408334834,
+          "sigma": 7.857042501253993
+        },
+        {
+          "zone_id": "CS",
+          "hour": 18,
+          "median": 72.59190690186384,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "CS",
+          "hour": 19,
+          "median": 66.41563124178884,
+          "sigma": 5.463189873111854
+        },
+        {
+          "zone_id": "CS",
+          "hour": 20,
+          "median": 45.46816749432554,
+          "sigma": 5.148248485122791
+        },
+        {
+          "zone_id": "CS",
+          "hour": 21,
+          "median": 30.305686522379965,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "CS",
+          "hour": 22,
+          "median": 25.51194319202586,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "CS",
+          "hour": 23,
+          "median": 24.182812783581195,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "MN",
+          "hour": 0,
+          "median": 22.809424895602447,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "MN",
+          "hour": 1,
+          "median": 22.43061532101613,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "MN",
+          "hour": 2,
+          "median": 21.961154527319415,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "MN",
+          "hour": 3,
+          "median": 21.167436437962287,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "MN",
+          "hour": 4,
+          "median": 21.721925527986315,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "MN",
+          "hour": 5,
+          "median": 21.71256997866331,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "MN",
+          "hour": 6,
+          "median": 26.387981367946015,
+          "sigma": 4.73397167424832
+        },
+        {
+          "zone_id": "MN",
+          "hour": 7,
+          "median": 39.04357923179663,
+          "sigma": 6.441716639028002
+        },
+        {
+          "zone_id": "MN",
+          "hour": 8,
+          "median": 56.04181520182205,
+          "sigma": 6.930625029581901
+        },
+        {
+          "zone_id": "MN",
+          "hour": 9,
+          "median": 59.939401835930894,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "MN",
+          "hour": 10,
+          "median": 42.26449444365226,
+          "sigma": 6.545544206243584
+        },
+        {
+          "zone_id": "MN",
+          "hour": 11,
+          "median": 28.31545493128926,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "MN",
+          "hour": 12,
+          "median": 22.441484589917152,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "MN",
+          "hour": 13,
+          "median": 21.951961203234987,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "MN",
+          "hour": 14,
+          "median": 23.9394067229359,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "MN",
+          "hour": 15,
+          "median": 26.18559892130809,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "MN",
+          "hour": 16,
+          "median": 37.133894540777966,
+          "sigma": 5.931311874210377
+        },
+        {
+          "zone_id": "MN",
+          "hour": 17,
+          "median": 56.791672632671364,
+          "sigma": 5.828619327765596
+        },
+        {
+          "zone_id": "MN",
+          "hour": 18,
+          "median": 67.58656271194607,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "MN",
+          "hour": 19,
+          "median": 59.412044827197256,
+          "sigma": 6.30437249201878
+        },
+        {
+          "zone_id": "MN",
+          "hour": 20,
+          "median": 39.341778973408665,
+          "sigma": 7.072940662246127
+        },
+        {
+          "zone_id": "MN",
+          "hour": 21,
+          "median": 28.440663917959014,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "MN",
+          "hour": 22,
+          "median": 23.213245519944735,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "MN",
+          "hour": 23,
+          "median": 22.20915015535809,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "MS",
+          "hour": 0,
+          "median": 19.73878749967345,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "MS",
+          "hour": 1,
+          "median": 19.988215793557522,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "MS",
+          "hour": 2,
+          "median": 19.615401878029676,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "MS",
+          "hour": 3,
+          "median": 19.785686060792155,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "MS",
+          "hour": 4,
+          "median": 19.583560928524488,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "MS",
+          "hour": 5,
+          "median": 20.406550675937225,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "MS",
+          "hour": 6,
+          "median": 23.838912894961346,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "MS",
+          "hour": 7,
+          "median": 34.335454234825306,
+          "sigma": 5.23343984094316
+        },
+        {
+          "zone_id": "MS",
+          "hour": 8,
+          "median": 50.46963529021271,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "MS",
+          "hour": 9,
+          "median": 53.77428844547087,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "MS",
+          "hour": 10,
+          "median": 37.70657163236416,
+          "sigma": 7.170857298804108
+        },
+        {
+          "zone_id": "MS",
+          "hour": 11,
+          "median": 25.6360591655845,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "MS",
+          "hour": 12,
+          "median": 19.779062355139466,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "MS",
+          "hour": 13,
+          "median": 20.71074079092365,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "MS",
+          "hour": 14,
+          "median": 19.12368203541834,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "MS",
+          "hour": 15,
+          "median": 23.599303339843633,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "MS",
+          "hour": 16,
+          "median": 32.202020596683404,
+          "sigma": 5.601832905785374
+        },
+        {
+          "zone_id": "MS",
+          "hour": 17,
+          "median": 50.64214075202578,
+          "sigma": 5.8966651537488355
+        },
+        {
+          "zone_id": "MS",
+          "hour": 18,
+          "median": 60.719350605826584,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "MS",
+          "hour": 19,
+          "median": 54.46705235444645,
+          "sigma": 7.677523348544541
+        },
+        {
+          "zone_id": "MS",
+          "hour": 20,
+          "median": 37.55263931958986,
+          "sigma": 7.648739589560802
+        },
+        {
+          "zone_id": "MS",
+          "hour": 21,
+          "median": 23.82679191906957,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "MS",
+          "hour": 22,
+          "median": 20.846859105961407,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "MS",
+          "hour": 23,
+          "median": 19.465027030741773,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "SC",
+          "hour": 0,
+          "median": 25.508229383794607,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "SC",
+          "hour": 1,
+          "median": 26.225693454536433,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "SC",
+          "hour": 2,
+          "median": 25.82949519524813,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "SC",
+          "hour": 3,
+          "median": 26.28380157135959,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "SC",
+          "hour": 4,
+          "median": 25.393558799756796,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "SC",
+          "hour": 5,
+          "median": 26.281428114247788,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "SC",
+          "hour": 6,
+          "median": 31.832031540012146,
+          "sigma": 5.224814469061355
+        },
+        {
+          "zone_id": "SC",
+          "hour": 7,
+          "median": 46.15262094072813,
+          "sigma": 8.094870222724051
+        },
+        {
+          "zone_id": "SC",
+          "hour": 8,
+          "median": 68.55417116176328,
+          "sigma": 5.044536750139473
+        },
+        {
+          "zone_id": "SC",
+          "hour": 9,
+          "median": 72.75242447359588,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "SC",
+          "hour": 10,
+          "median": 52.63936855588439,
+          "sigma": 8.447663935297438
+        },
+        {
+          "zone_id": "SC",
+          "hour": 11,
+          "median": 34.00393341612198,
+          "sigma": 5.062584200879584
+        },
+        {
+          "zone_id": "SC",
+          "hour": 12,
+          "median": 27.11436317318198,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "SC",
+          "hour": 13,
+          "median": 25.956681529901054,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "SC",
+          "hour": 14,
+          "median": 27.24793947702031,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "SC",
+          "hour": 15,
+          "median": 30.9316634825046,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "SC",
+          "hour": 16,
+          "median": 44.739554624293305,
+          "sigma": 5.571278039342806
+        },
+        {
+          "zone_id": "SC",
+          "hour": 17,
+          "median": 68.19200712656436,
+          "sigma": 8.19022479085144
+        },
+        {
+          "zone_id": "SC",
+          "hour": 18,
+          "median": 80.18195499814759,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "SC",
+          "hour": 19,
+          "median": 72.41873660584683,
+          "sigma": 6.651595981300868
+        },
+        {
+          "zone_id": "SC",
+          "hour": 20,
+          "median": 49.6328749615961,
+          "sigma": 10.396173456856616
+        },
+        {
+          "zone_id": "SC",
+          "hour": 21,
+          "median": 33.030321930455855,
+          "sigma": 4.9113520071932415
+        },
+        {
+          "zone_id": "SC",
+          "hour": 22,
+          "median": 28.526958346207678,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "SC",
+          "hour": 23,
+          "median": 26.518249161581032,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "VN",
+          "hour": 0,
+          "median": 20.27321505252091,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "VN",
+          "hour": 1,
+          "median": 20.871929534749825,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "VN",
+          "hour": 2,
+          "median": 21.631954683250946,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "VN",
+          "hour": 3,
+          "median": 20.85290537777159,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "VN",
+          "hour": 4,
+          "median": 20.843405412471537,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "VN",
+          "hour": 5,
+          "median": 21.094040747695953,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "VN",
+          "hour": 6,
+          "median": 25.417549372808637,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "VN",
+          "hour": 7,
+          "median": 36.34889850296885,
+          "sigma": 7.716911785755507
+        },
+        {
+          "zone_id": "VN",
+          "hour": 8,
+          "median": 54.67992674964604,
+          "sigma": 4.7322702718451986
+        },
+        {
+          "zone_id": "VN",
+          "hour": 9,
+          "median": 57.1727699313552,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "VN",
+          "hour": 10,
+          "median": 40.87449340188331,
+          "sigma": 6.078262752598967
+        },
+        {
+          "zone_id": "VN",
+          "hour": 11,
+          "median": 26.52092128929018,
+          "sigma": 4.703606511330926
+        },
+        {
+          "zone_id": "VN",
+          "hour": 12,
+          "median": 20.97275955592091,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "VN",
+          "hour": 13,
+          "median": 20.73747216070536,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "VN",
+          "hour": 14,
+          "median": 22.771247392813315,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "VN",
+          "hour": 15,
+          "median": 27.089109976234916,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "VN",
+          "hour": 16,
+          "median": 35.450235215766405,
+          "sigma": 6.412499592564631
+        },
+        {
+          "zone_id": "VN",
+          "hour": 17,
+          "median": 52.202273995551835,
+          "sigma": 4.548486924001241
+        },
+        {
+          "zone_id": "VN",
+          "hour": 18,
+          "median": 63.84964034382985,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "VN",
+          "hour": 19,
+          "median": 56.354306456248395,
+          "sigma": 4.6175531630009665
+        },
+        {
+          "zone_id": "VN",
+          "hour": 20,
+          "median": 39.87807586227201,
+          "sigma": 5.303800091175324
+        },
+        {
+          "zone_id": "VN",
+          "hour": 21,
+          "median": 25.501668798356462,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "VN",
+          "hour": 22,
+          "median": 21.392369135547582,
+          "sigma": 4.0
+        },
+        {
+          "zone_id": "VN",
+          "hour": 23,
+          "median": 21.225706974725853,
+          "sigma": 4.0
+        }
+      ],
+      "global_median": 27.16641747739618,
+      "global_sigma": 9.374148414539333
+    },
+    "incidents_30m": {
+      "table": [
+        {
+          "zone_id": "CS",
+          "hour": 0,
+          "median": 1.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 1,
+          "median": 1.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 2,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 3,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 4,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 5,
+          "median": 1.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 6,
+          "median": 1.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 7,
+          "median": 3.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 8,
+          "median": 2.5,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 9,
+          "median": 4.0,
+          "sigma": 2.9652
+        },
+        {
+          "zone_id": "CS",
+          "hour": 10,
+          "median": 3.0,
+          "sigma": 2.9652
+        },
+        {
+          "zone_id": "CS",
+          "hour": 11,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 12,
+          "median": 1.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 13,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 14,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 15,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 16,
+          "median": 2.5,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 17,
+          "median": 2.5,
+          "sigma": 2.2239
+        },
+        {
+          "zone_id": "CS",
+          "hour": 18,
+          "median": 5.0,
+          "sigma": 2.9652
+        },
+        {
+          "zone_id": "CS",
+          "hour": 19,
+          "median": 6.5,
+          "sigma": 2.2239
+        },
+        {
+          "zone_id": "CS",
+          "hour": 20,
+          "median": 3.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 21,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 22,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "CS",
+          "hour": 23,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 0,
+          "median": 1.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 1,
+          "median": 1.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 2,
+          "median": 1.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 3,
+          "median": 1.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 4,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 5,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 6,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 7,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 8,
+          "median": 3.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 9,
+          "median": 3.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 10,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 11,
+          "median": 2.0,
+          "sigma": 2.2239
+        },
+        {
+          "zone_id": "MN",
+          "hour": 12,
+          "median": 1.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 13,
+          "median": 1.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 14,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 15,
+          "median": 1.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 16,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 17,
+          "median": 3.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 18,
+          "median": 4.0,
+          "sigma": 2.9652
+        },
+        {
+          "zone_id": "MN",
+          "hour": 19,
+          "median": 3.0,
+          "sigma": 2.9652
+        },
+        {
+          "zone_id": "MN",
+          "hour": 20,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 21,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 22,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MN",
+          "hour": 23,
+          "median": 1.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 0,
+          "median": 1.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 1,
+          "median": 1.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 2,
+          "median": 1.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 3,
+          "median": 1.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 4,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 5,
+          "median": 1.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 6,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 7,
+          "median": 1.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 8,
+          "median": 3.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 9,
+          "median": 3.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 10,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 11,
+          "median": 1.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 12,
+          "median": 1.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 13,
+          "median": 1.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 14,
+          "median": 1.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 15,
+          "median": 1.5,
+          "sigma": 2.2239
+        },
+        {
+          "zone_id": "MS",
+          "hour": 16,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 17,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 18,
+          "median": 3.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 19,
+          "median": 4.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 20,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 21,
+          "median": 0.5,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 22,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "MS",
+          "hour": 23,
+          "median": 1.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 0,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 1,
+          "median": 1.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 2,
+          "median": 3.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 3,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 4,
+          "median": 1.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 5,
+          "median": 2.5,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 6,
+          "median": 3.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 7,
+          "median": 4.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 8,
+          "median": 4.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 9,
+          "median": 4.0,
+          "sigma": 2.2239
+        },
+        {
+          "zone_id": "SC",
+          "hour": 10,
+          "median": 3.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 11,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 12,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 13,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 14,
+          "median": 1.5,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 15,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 16,
+          "median": 3.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 17,
+          "median": 3.0,
+          "sigma": 2.2239
+        },
+        {
+          "zone_id": "SC",
+          "hour": 18,
+          "median": 4.0,
+          "sigma": 2.9652
+        },
+        {
+          "zone_id": "SC",
+          "hour": 19,
+          "median": 4.5,
+          "sigma": 2.2239
+        },
+        {
+          "zone_id": "SC",
+          "hour": 20,
+          "median": 4.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 21,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 22,
+          "median": 3.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "SC",
+          "hour": 23,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 0,
+          "median": 1.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 1,
+          "median": 1.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 2,
+          "median": 1.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 3,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 4,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 5,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 6,
+          "median": 1.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 7,
+          "median": 1.5,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 8,
+          "median": 3.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 9,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 10,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 11,
+          "median": 0.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 12,
+          "median": 1.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 13,
+          "median": 1.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 14,
+          "median": 1.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 15,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 16,
+          "median": 3.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 17,
+          "median": 3.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 18,
+          "median": 3.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 19,
+          "median": 3.5,
+          "sigma": 2.2239
+        },
+        {
+          "zone_id": "VN",
+          "hour": 20,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 21,
+          "median": 1.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 22,
+          "median": 2.0,
+          "sigma": 1.5
+        },
+        {
+          "zone_id": "VN",
+          "hour": 23,
+          "median": 2.0,
+          "sigma": 1.5
+        }
+      ],
+      "global_median": 2.0,
+      "global_sigma": 1.5
+    },
+    "aqi": {
+      "table": [
+        {
+          "zone_id": "CS",
+          "hour": 0,
+          "median": 86.8118146634937,
+          "sigma": 14.145134839178978
+        },
+        {
+          "zone_id": "CS",
+          "hour": 1,
+          "median": 87.84371900791324,
+          "sigma": 14.795869809608265
+        },
+        {
+          "zone_id": "CS",
+          "hour": 2,
+          "median": 89.97043503477191,
+          "sigma": 13.176986914173796
+        },
+        {
+          "zone_id": "CS",
+          "hour": 3,
+          "median": 92.42858251132714,
+          "sigma": 17.905157139753815
+        },
+        {
+          "zone_id": "CS",
+          "hour": 4,
+          "median": 89.77499146619095,
+          "sigma": 14.692730758046942
+        },
+        {
+          "zone_id": "CS",
+          "hour": 5,
+          "median": 88.30267735093204,
+          "sigma": 14.591192182503773
+        },
+        {
+          "zone_id": "CS",
+          "hour": 6,
+          "median": 87.92835738620505,
+          "sigma": 13.026707487496727
+        },
+        {
+          "zone_id": "CS",
+          "hour": 7,
+          "median": 88.48761809927271,
+          "sigma": 11.797466609159496
+        },
+        {
+          "zone_id": "CS",
+          "hour": 8,
+          "median": 87.82738486109935,
+          "sigma": 15.837141017084136
+        },
+        {
+          "zone_id": "CS",
+          "hour": 9,
+          "median": 89.70651030440257,
+          "sigma": 13.318124108049808
+        },
+        {
+          "zone_id": "CS",
+          "hour": 10,
+          "median": 90.43451932652842,
+          "sigma": 12.738937471424462
+        },
+        {
+          "zone_id": "CS",
+          "hour": 11,
+          "median": 90.07663830817728,
+          "sigma": 14.022323040711514
+        },
+        {
+          "zone_id": "CS",
+          "hour": 12,
+          "median": 92.28542630517224,
+          "sigma": 9.681954225343961
+        },
+        {
+          "zone_id": "CS",
+          "hour": 13,
+          "median": 90.67889611659172,
+          "sigma": 10.230365829078147
+        },
+        {
+          "zone_id": "CS",
+          "hour": 14,
+          "median": 92.99774892866918,
+          "sigma": 18.16040906855975
+        },
+        {
+          "zone_id": "CS",
+          "hour": 15,
+          "median": 102.64891492012576,
+          "sigma": 27.450896745203472
+        },
+        {
+          "zone_id": "CS",
+          "hour": 16,
+          "median": 122.58273281847788,
+          "sigma": 30.48670197898288
+        },
+        {
+          "zone_id": "CS",
+          "hour": 17,
+          "median": 129.60952206153118,
+          "sigma": 31.54965559071704
+        },
+        {
+          "zone_id": "CS",
+          "hour": 18,
+          "median": 129.63987173122783,
+          "sigma": 30.809196900680803
+        },
+        {
+          "zone_id": "CS",
+          "hour": 19,
+          "median": 122.28943347452483,
+          "sigma": 28.15115946116482
+        },
+        {
+          "zone_id": "CS",
+          "hour": 20,
+          "median": 107.80570035443688,
+          "sigma": 25.17055492084666
+        },
+        {
+          "zone_id": "CS",
+          "hour": 21,
+          "median": 94.85978276386926,
+          "sigma": 13.395735649250927
+        },
+        {
+          "zone_id": "CS",
+          "hour": 22,
+          "median": 93.79915428237142,
+          "sigma": 10.862654080615574
+        },
+        {
+          "zone_id": "CS",
+          "hour": 23,
+          "median": 91.71467368349258,
+          "sigma": 11.219603343899658
+        },
+        {
+          "zone_id": "MN",
+          "hour": 0,
+          "median": 81.23573506145726,
+          "sigma": 11.109249997436006
+        },
+        {
+          "zone_id": "MN",
+          "hour": 1,
+          "median": 84.3296139210747,
+          "sigma": 13.239967642080058
+        },
+        {
+          "zone_id": "MN",
+          "hour": 2,
+          "median": 85.08700634629695,
+          "sigma": 15.042071314788991
+        },
+        {
+          "zone_id": "MN",
+          "hour": 3,
+          "median": 86.41139427077866,
+          "sigma": 14.978630458033614
+        },
+        {
+          "zone_id": "MN",
+          "hour": 4,
+          "median": 84.57873057805993,
+          "sigma": 14.129917689242532
+        },
+        {
+          "zone_id": "MN",
+          "hour": 5,
+          "median": 81.52138960759079,
+          "sigma": 14.11887779550035
+        },
+        {
+          "zone_id": "MN",
+          "hour": 6,
+          "median": 81.08867507284793,
+          "sigma": 18.713872414009387
+        },
+        {
+          "zone_id": "MN",
+          "hour": 7,
+          "median": 82.94557810506318,
+          "sigma": 9.874262427391379
+        },
+        {
+          "zone_id": "MN",
+          "hour": 8,
+          "median": 83.22091467636805,
+          "sigma": 13.128139691865838
+        },
+        {
+          "zone_id": "MN",
+          "hour": 9,
+          "median": 83.26990661338425,
+          "sigma": 14.514695972972751
+        },
+        {
+          "zone_id": "MN",
+          "hour": 10,
+          "median": 82.96501194123711,
+          "sigma": 12.846591928121361
+        },
+        {
+          "zone_id": "MN",
+          "hour": 11,
+          "median": 84.23291154067908,
+          "sigma": 11.989951915801363
+        },
+        {
+          "zone_id": "MN",
+          "hour": 12,
+          "median": 85.12070351166003,
+          "sigma": 11.141571571662622
+        },
+        {
+          "zone_id": "MN",
+          "hour": 13,
+          "median": 86.07724357404355,
+          "sigma": 9.705202060698838
+        },
+        {
+          "zone_id": "MN",
+          "hour": 14,
+          "median": 87.16248065490936,
+          "sigma": 17.21640202075134
+        },
+        {
+          "zone_id": "MN",
+          "hour": 15,
+          "median": 96.84624590108997,
+          "sigma": 29.39017953551236
+        },
+        {
+          "zone_id": "MN",
+          "hour": 16,
+          "median": 115.96558283054247,
+          "sigma": 35.08623707149204
+        },
+        {
+          "zone_id": "MN",
+          "hour": 17,
+          "median": 126.80989979460976,
+          "sigma": 32.07608950991369
+        },
+        {
+          "zone_id": "MN",
+          "hour": 18,
+          "median": 124.40837651618753,
+          "sigma": 32.49264405637782
+        },
+        {
+          "zone_id": "MN",
+          "hour": 19,
+          "median": 115.54626361894111,
+          "sigma": 27.773741950773847
+        },
+        {
+          "zone_id": "MN",
+          "hour": 20,
+          "median": 101.05317847583046,
+          "sigma": 21.56368313346292
+        },
+        {
+          "zone_id": "MN",
+          "hour": 21,
+          "median": 89.66254562483391,
+          "sigma": 13.818406633911174
+        },
+        {
+          "zone_id": "MN",
+          "hour": 22,
+          "median": 87.98635878413373,
+          "sigma": 10.978937716154018
+        },
+        {
+          "zone_id": "MN",
+          "hour": 23,
+          "median": 87.17748647883475,
+          "sigma": 9.579334451750253
+        },
+        {
+          "zone_id": "MS",
+          "hour": 0,
+          "median": 84.06402476768307,
+          "sigma": 14.387318053031187
+        },
+        {
+          "zone_id": "MS",
+          "hour": 1,
+          "median": 86.1281626660767,
+          "sigma": 13.216553529010186
+        },
+        {
+          "zone_id": "MS",
+          "hour": 2,
+          "median": 87.82748703661227,
+          "sigma": 15.561689475396157
+        },
+        {
+          "zone_id": "MS",
+          "hour": 3,
+          "median": 88.30387083217478,
+          "sigma": 16.0160558582479
+        },
+        {
+          "zone_id": "MS",
+          "hour": 4,
+          "median": 88.13589555296642,
+          "sigma": 12.869687309090143
+        },
+        {
+          "zone_id": "MS",
+          "hour": 5,
+          "median": 85.75796001472142,
+          "sigma": 15.481564450274247
+        },
+        {
+          "zone_id": "MS",
+          "hour": 6,
+          "median": 85.21210009471875,
+          "sigma": 14.37583000652928
+        },
+        {
+          "zone_id": "MS",
+          "hour": 7,
+          "median": 87.61151319573278,
+          "sigma": 11.766284865657605
+        },
+        {
+          "zone_id": "MS",
+          "hour": 8,
+          "median": 87.12024995874896,
+          "sigma": 12.572862789955805
+        },
+        {
+          "zone_id": "MS",
+          "hour": 9,
+          "median": 88.27036708290468,
+          "sigma": 12.093735177022781
+        },
+        {
+          "zone_id": "MS",
+          "hour": 10,
+          "median": 88.72928077878326,
+          "sigma": 11.090979806119064
+        },
+        {
+          "zone_id": "MS",
+          "hour": 11,
+          "median": 88.98977148279707,
+          "sigma": 12.316184610491915
+        },
+        {
+          "zone_id": "MS",
+          "hour": 12,
+          "median": 88.04623887748056,
+          "sigma": 9.545204571622264
+        },
+        {
+          "zone_id": "MS",
+          "hour": 13,
+          "median": 89.30307368109811,
+          "sigma": 9.125992748778508
+        },
+        {
+          "zone_id": "MS",
+          "hour": 14,
+          "median": 90.4303184337588,
+          "sigma": 15.99205761925929
+        },
+        {
+          "zone_id": "MS",
+          "hour": 15,
+          "median": 101.25378580443422,
+          "sigma": 27.602384329750077
+        },
+        {
+          "zone_id": "MS",
+          "hour": 16,
+          "median": 115.91935826346868,
+          "sigma": 33.5260306793662
+        },
+        {
+          "zone_id": "MS",
+          "hour": 17,
+          "median": 128.8889414215066,
+          "sigma": 31.66174859422882
+        },
+        {
+          "zone_id": "MS",
+          "hour": 18,
+          "median": 126.87844765717719,
+          "sigma": 31.133933673907627
+        },
+        {
+          "zone_id": "MS",
+          "hour": 19,
+          "median": 117.77746370592652,
+          "sigma": 28.564415765667853
+        },
+        {
+          "zone_id": "MS",
+          "hour": 20,
+          "median": 105.67527487471058,
+          "sigma": 21.685674557040038
+        },
+        {
+          "zone_id": "MS",
+          "hour": 21,
+          "median": 92.65191478848908,
+          "sigma": 13.313674329927954
+        },
+        {
+          "zone_id": "MS",
+          "hour": 22,
+          "median": 89.08872047069124,
+          "sigma": 10.242786416274996
+        },
+        {
+          "zone_id": "MS",
+          "hour": 23,
+          "median": 89.21729526968471,
+          "sigma": 12.845916810870946
+        },
+        {
+          "zone_id": "SC",
+          "hour": 0,
+          "median": 90.22728201386741,
+          "sigma": 15.703167065066271
+        },
+        {
+          "zone_id": "SC",
+          "hour": 1,
+          "median": 93.71875137764985,
+          "sigma": 13.446784236188211
+        },
+        {
+          "zone_id": "SC",
+          "hour": 2,
+          "median": 94.70983518247124,
+          "sigma": 12.644822734116275
+        },
+        {
+          "zone_id": "SC",
+          "hour": 3,
+          "median": 95.2722367118835,
+          "sigma": 15.701338918536564
+        },
+        {
+          "zone_id": "SC",
+          "hour": 4,
+          "median": 92.81420464774244,
+          "sigma": 16.422498539799786
+        },
+        {
+          "zone_id": "SC",
+          "hour": 5,
+          "median": 91.42962808291762,
+          "sigma": 17.28015071284208
+        },
+        {
+          "zone_id": "SC",
+          "hour": 6,
+          "median": 93.46795547736161,
+          "sigma": 13.919291039472826
+        },
+        {
+          "zone_id": "SC",
+          "hour": 7,
+          "median": 92.80821720369988,
+          "sigma": 13.697591659601558
+        },
+        {
+          "zone_id": "SC",
+          "hour": 8,
+          "median": 93.26724440720271,
+          "sigma": 15.351911665757667
+        },
+        {
+          "zone_id": "SC",
+          "hour": 9,
+          "median": 92.95645793358389,
+          "sigma": 13.407077447250582
+        },
+        {
+          "zone_id": "SC",
+          "hour": 10,
+          "median": 94.20586335461732,
+          "sigma": 12.848737556354665
+        },
+        {
+          "zone_id": "SC",
+          "hour": 11,
+          "median": 94.69092998518268,
+          "sigma": 10.139699357015674
+        },
+        {
+          "zone_id": "SC",
+          "hour": 12,
+          "median": 95.65208597525321,
+          "sigma": 10.544723720148909
+        },
+        {
+          "zone_id": "SC",
+          "hour": 13,
+          "median": 95.48507238655051,
+          "sigma": 7.238585221582421
+        },
+        {
+          "zone_id": "SC",
+          "hour": 14,
+          "median": 98.46523875018158,
+          "sigma": 15.718340977377764
+        },
+        {
+          "zone_id": "SC",
+          "hour": 15,
+          "median": 108.40484413417033,
+          "sigma": 28.174394769606263
+        },
+        {
+          "zone_id": "SC",
+          "hour": 16,
+          "median": 124.67912189547283,
+          "sigma": 33.07523800540632
+        },
+        {
+          "zone_id": "SC",
+          "hour": 17,
+          "median": 135.484265775316,
+          "sigma": 28.813061915469774
+        },
+        {
+          "zone_id": "SC",
+          "hour": 18,
+          "median": 134.13946766461942,
+          "sigma": 31.583302191410414
+        },
+        {
+          "zone_id": "SC",
+          "hour": 19,
+          "median": 123.75469663006584,
+          "sigma": 28.380661639081183
+        },
+        {
+          "zone_id": "SC",
+          "hour": 20,
+          "median": 109.11226827139987,
+          "sigma": 25.418786074815493
+        },
+        {
+          "zone_id": "SC",
+          "hour": 21,
+          "median": 99.37632707074707,
+          "sigma": 14.414897962014852
+        },
+        {
+          "zone_id": "SC",
+          "hour": 22,
+          "median": 97.34671215331883,
+          "sigma": 10.917347565843665
+        },
+        {
+          "zone_id": "SC",
+          "hour": 23,
+          "median": 96.77864568134747,
+          "sigma": 10.507688697868797
+        },
+        {
+          "zone_id": "VN",
+          "hour": 0,
+          "median": 77.53420993346191,
+          "sigma": 17.618230931382694
+        },
+        {
+          "zone_id": "VN",
+          "hour": 1,
+          "median": 79.15982517723337,
+          "sigma": 13.937837744535813
+        },
+        {
+          "zone_id": "VN",
+          "hour": 2,
+          "median": 81.78729440412181,
+          "sigma": 14.604367071611444
+        },
+        {
+          "zone_id": "VN",
+          "hour": 3,
+          "median": 81.23293621135359,
+          "sigma": 15.084622790247657
+        },
+        {
+          "zone_id": "VN",
+          "hour": 4,
+          "median": 82.0238647771164,
+          "sigma": 15.548845282286994
+        },
+        {
+          "zone_id": "VN",
+          "hour": 5,
+          "median": 78.50375069689692,
+          "sigma": 15.575382317094702
+        },
+        {
+          "zone_id": "VN",
+          "hour": 6,
+          "median": 78.67131422038474,
+          "sigma": 13.499707002162987
+        },
+        {
+          "zone_id": "VN",
+          "hour": 7,
+          "median": 78.82940394784401,
+          "sigma": 13.536588205487664
+        },
+        {
+          "zone_id": "VN",
+          "hour": 8,
+          "median": 79.46652644757305,
+          "sigma": 11.820171623725127
+        },
+        {
+          "zone_id": "VN",
+          "hour": 9,
+          "median": 78.73923000000154,
+          "sigma": 13.675864754472883
+        },
+        {
+          "zone_id": "VN",
+          "hour": 10,
+          "median": 80.32280737830905,
+          "sigma": 12.477637774782208
+        },
+        {
+          "zone_id": "VN",
+          "hour": 11,
+          "median": 80.91860540987057,
+          "sigma": 12.912662108470556
+        },
+        {
+          "zone_id": "VN",
+          "hour": 12,
+          "median": 80.38256564232113,
+          "sigma": 11.16449125615073
+        },
+        {
+          "zone_id": "VN",
+          "hour": 13,
+          "median": 80.56399725294311,
+          "sigma": 8.961932000531373
+        },
+        {
+          "zone_id": "VN",
+          "hour": 14,
+          "median": 83.7826962368967,
+          "sigma": 15.220859916058256
+        },
+        {
+          "zone_id": "VN",
+          "hour": 15,
+          "median": 92.35629902124433,
+          "sigma": 29.421210634897857
+        },
+        {
+          "zone_id": "VN",
+          "hour": 16,
+          "median": 109.19724812045098,
+          "sigma": 32.639792428839
+        },
+        {
+          "zone_id": "VN",
+          "hour": 17,
+          "median": 120.86031314900295,
+          "sigma": 31.041286400325987
+        },
+        {
+          "zone_id": "VN",
+          "hour": 18,
+          "median": 120.13778833215738,
+          "sigma": 30.013339728586114
+        },
+        {
+          "zone_id": "VN",
+          "hour": 19,
+          "median": 110.47831428488882,
+          "sigma": 32.1045088688901
+        },
+        {
+          "zone_id": "VN",
+          "hour": 20,
+          "median": 97.53377551306886,
+          "sigma": 22.160559495769245
+        },
+        {
+          "zone_id": "VN",
+          "hour": 21,
+          "median": 85.29475284490186,
+          "sigma": 11.241842897960128
+        },
+        {
+          "zone_id": "VN",
+          "hour": 22,
+          "median": 83.0613061913659,
+          "sigma": 13.390756985732207
+        },
+        {
+          "zone_id": "VN",
+          "hour": 23,
+          "median": 81.23979568783594,
+          "sigma": 10.126542529371369
+        }
+      ],
+      "global_median": 90.94038636274789,
+      "global_sigma": 17.648584427413862
+    }
+  },
+  "metrics": {
+    "val": {
+      "rows": {
+        "precision": 0.8181818181818182,
+        "recall": 0.5294117647058824,
+        "f1": 0.6428571428571429,
+        "positives": 51,
+        "rows": 2005,
+        "roc_auc_hybrid": 0.9281514038573464,
+        "pr_auc_hybrid": 0.6596334949828604,
+        "roc_auc_stat": 0.911794810042748,
+        "pr_auc_stat": 0.5952783593843367,
+        "roc_auc_iso": 0.9174844963573966,
+        "pr_auc_iso": 0.49894851483714053,
+        "roc_auc_lstm": 0.9509001143958096,
+        "pr_auc_lstm": 0.4675508846734595
+      },
+      "events": {
+        "true_events": 3,
+        "detected": 2,
+        "recall": 0.6666666666666666,
+        "precision": 1.0,
+        "f1": 0.8,
+        "false_alarm_episodes": 0,
+        "false_alarms_per_day": 0.0,
+        "mean_minutes_to_confirm": 10.0,
+        "decoys_total": 2,
+        "decoys_fired": [],
+        "per_event": [
+          {
+            "label": "S1_traffic_incident_cluster",
+            "start": "2026-09-22 11:00:00",
+            "end": "2026-09-22 11:45:00",
+            "zones": [
+              "CS"
+            ],
+            "detected": true,
+            "minutes_to_confirm": 15.0,
+            "minutes_to_first_warning": 10.0,
+            "peak_state": 3
+          },
+          {
+            "label": "A_flood_disruption",
+            "start": "2026-09-22 18:00:00",
+            "end": "2026-09-22 18:45:00",
+            "zones": [
+              "MN",
+              "MS"
+            ],
+            "detected": true,
+            "minutes_to_confirm": 5.0,
+            "minutes_to_first_warning": 0.0,
+            "peak_state": 3
+          },
+          {
+            "label": "S2_smog_buildup",
+            "start": "2026-09-23 07:00:00",
+            "end": "2026-09-23 08:40:00",
+            "zones": [
+              "VN"
+            ],
+            "detected": false,
+            "minutes_to_confirm": null,
+            "minutes_to_first_warning": 30.0,
+            "peak_state": 1
+          }
+        ],
+        "false_alarm_list": []
+      },
+      "days": 1.39,
+      "ablation": {
+        "stat": {
+          "event_recall": 1.0,
+          "false_alarms_per_day": 10.08,
+          "pr_auc": 0.5952783593843367
+        },
+        "iso": {
+          "event_recall": 0.3333333333333333,
+          "false_alarms_per_day": 0.0,
+          "pr_auc": 0.49894851483714053
+        },
+        "lstm": {
+          "event_recall": 0.3333333333333333,
+          "false_alarms_per_day": 0.0,
+          "pr_auc": 0.4675508846734595
+        },
+        "hybrid": {
+          "event_recall": 0.6666666666666666,
+          "false_alarms_per_day": 0.0,
+          "pr_auc": 0.6596334949828604
+        }
+      }
+    },
+    "test": {
+      "rows": {
+        "precision": 0.8222222222222222,
+        "recall": 0.5362318840579711,
+        "f1": 0.6491228070175439,
+        "positives": 69,
+        "rows": 2005,
+        "roc_auc_hybrid": 0.964404419690981,
+        "pr_auc_hybrid": 0.7695678767063058,
+        "roc_auc_stat": 0.9421599892202658,
+        "pr_auc_stat": 0.6621246862769211,
+        "roc_auc_iso": 0.9577718888489639,
+        "pr_auc_iso": 0.7356029119388233,
+        "roc_auc_lstm": 0.9412878787878788,
+        "pr_auc_lstm": 0.5851758091624718
+      },
+      "events": {
+        "true_events": 4,
+        "detected": 4,
+        "recall": 1.0,
+        "precision": 0.8333333333333334,
+        "f1": 0.9090909090909091,
+        "false_alarm_episodes": 1,
+        "false_alarms_per_day": 0.72,
+        "mean_minutes_to_confirm": 30.0,
+        "decoys_total": 2,
+        "decoys_fired": [],
+        "per_event": [
+          {
+            "label": "B_incident_cluster_aqi",
+            "start": "2026-09-23 20:00:00",
+            "end": "2026-09-23 20:40:00",
+            "zones": [
+              "SC"
+            ],
+            "detected": true,
+            "minutes_to_confirm": 10.0,
+            "minutes_to_first_warning": 5.0,
+            "peak_state": 2
+          },
+          {
+            "label": "S3_waterlogging",
+            "start": "2026-09-24 09:00:00",
+            "end": "2026-09-24 10:00:00",
+            "zones": [
+              "MS",
+              "VN"
+            ],
+            "detected": true,
+            "minutes_to_confirm": 15.0,
+            "minutes_to_first_warning": 10.0,
+            "peak_state": 3
+          },
+          {
+            "label": "S4_smog_buildup",
+            "start": "2026-09-24 16:00:00",
+            "end": "2026-09-24 17:50:00",
+            "zones": [
+              "CS"
+            ],
+            "detected": true,
+            "minutes_to_confirm": 55.0,
+            "minutes_to_first_warning": 50.0,
+            "peak_state": 2
+          },
+          {
+            "label": "S5_signal_failure_gridlock",
+            "start": "2026-09-24 22:00:00",
+            "end": "2026-09-24 22:50:00",
+            "zones": [
+              "MN"
+            ],
+            "detected": true,
+            "minutes_to_confirm": 40.0,
+            "minutes_to_first_warning": 10.0,
+            "peak_state": 2
+          }
+        ],
+        "false_alarm_list": [
+          {
+            "zone_id": "MS",
+            "start": "2026-09-24 20:00:00",
+            "end": "2026-09-24 20:10:00"
+          }
+        ]
+      },
+      "days": 1.39,
+      "ablation": {
+        "stat": {
+          "event_recall": 1.0,
+          "false_alarms_per_day": 2.16,
+          "pr_auc": 0.6621246862769211
+        },
+        "iso": {
+          "event_recall": 0.5,
+          "false_alarms_per_day": 0.0,
+          "pr_auc": 0.7356029119388233
+        },
+        "lstm": {
+          "event_recall": 0.25,
+          "false_alarms_per_day": 0.0,
+          "pr_auc": 0.5851758091624718
+        },
+        "hybrid": {
+          "event_recall": 1.0,
+          "false_alarms_per_day": 0.72,
+          "pr_auc": 0.7695678767063058
+        }
+      }
+    }
+  },
+  "scenarios": [
+    {
+      "id": "S1",
+      "kind": "event",
+      "label": "traffic_incident_cluster",
+      "description": "Road accident cluster blocking the main corridor",
+      "zones": [
+        "CS"
+      ],
+      "start": "2026-09-22 11:00:00",
+      "end": "2026-09-22 11:45:00"
+    },
+    {
+      "id": "D2",
+      "kind": "decoy",
+      "label": "decoy",
+      "description": "brief traffic bump near the bus stand",
+      "zones": [
+        "SC"
+      ],
+      "start": "2026-09-22 14:00:00",
+      "end": "2026-09-22 14:20:00"
+    },
+    {
+      "id": "A",
+      "kind": "event",
+      "label": "A_flood_disruption",
+      "description": "Localised flood disruption (original demo event A)",
+      "zones": [
+        "MN",
+        "MS"
+      ],
+      "start": "2026-09-22 18:00:00",
+      "end": "2026-09-22 18:45:00"
+    },
+    {
+      "id": "D1",
+      "kind": "decoy",
+      "label": "decoy",
+      "description": "light citywide shower at night",
+      "zones": [
+        "MN",
+        "MS",
+        "VN",
+        "CS",
+        "SC"
+      ],
+      "start": "2026-09-23 02:00:00",
+      "end": "2026-09-23 02:40:00"
+    },
+    {
+      "id": "S2",
+      "kind": "event",
+      "label": "smog_buildup",
+      "description": "Gradual smog build-up (e.g. waste burning upwind)",
+      "zones": [
+        "VN"
+      ],
+      "start": "2026-09-23 07:00:00",
+      "end": "2026-09-23 08:40:00"
+    },
+    {
+      "id": "B",
+      "kind": "event",
+      "label": "B_incident_cluster_aqi",
+      "description": "Incident cluster with AQI spike (original demo event B)",
+      "zones": [
+        "SC"
+      ],
+      "start": "2026-09-23 20:00:00",
+      "end": "2026-09-23 20:40:00"
+    },
+    {
+      "id": "D4",
+      "kind": "decoy",
+      "label": "decoy",
+      "description": "drizzle before dawn",
+      "zones": [
+        "VN",
+        "MS"
+      ],
+      "start": "2026-09-24 03:30:00",
+      "end": "2026-09-24 04:00:00"
+    },
+    {
+      "id": "S3",
+      "kind": "event",
+      "label": "waterlogging",
+      "description": "Waterlogging after a cloudburst on the western side",
+      "zones": [
+        "VN",
+        "MS"
+      ],
+      "start": "2026-09-24 09:00:00",
+      "end": "2026-09-24 10:00:00"
+    },
+    {
+      "id": "D3",
+      "kind": "decoy",
+      "label": "decoy",
+      "description": "small afternoon AQI rise",
+      "zones": [
+        "MN"
+      ],
+      "start": "2026-09-24 13:00:00",
+      "end": "2026-09-24 13:25:00"
+    },
+    {
+      "id": "S4",
+      "kind": "event",
+      "label": "smog_buildup",
+      "description": "Evening air-quality spike in the central business area",
+      "zones": [
+        "CS"
+      ],
+      "start": "2026-09-24 16:00:00",
+      "end": "2026-09-24 17:50:00"
+    },
+    {
+      "id": "S5",
+      "kind": "event",
+      "label": "signal_failure_gridlock",
+      "description": "Night-time gridlock after a traffic-signal failure",
+      "zones": [
+        "MN"
+      ],
+      "start": "2026-09-24 22:00:00",
+      "end": "2026-09-24 22:50:00"
+    }
+  ],
+  "note": "Correlations are shown as possible links, not confirmed causes. Metrics are measured on injected scenarios and do not claim real-world accuracy."
+}
