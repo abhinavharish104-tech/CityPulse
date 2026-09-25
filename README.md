@@ -6,7 +6,7 @@
 
 A live civic health dashboard that fuses weather, air quality, traffic and road incidents into **one pulse per neighbourhood**, and shows the evidence behind every alert.
 
-[![Live app](https://img.shields.io/badge/Live%20app-open-F2B544?style=for-the-badge)](#)
+[![Live app](https://img.shields.io/badge/Live%20app-open-F2B544?style=for-the-badge)](https://citypulse-asp.streamlit.app/)
 ![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Streamlit](https://img.shields.io/badge/Streamlit-app-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
 ![AmiHacks](https://img.shields.io/badge/AmiHacks-Track%20B-E99BBE?style=for-the-badge)
