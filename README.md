@@ -146,28 +146,7 @@ Open `http://localhost:8501`. To try it:
 2. Turn on **Play the week**.
 3. Open the **Timeline** tab.
 
-### Rebuild the detector on real data
-The shipped `data/` folder lets the app run immediately. To retrain on the real Open-Meteo dataset:
-- **Colab (recommended):** open `pipeline/CityPulse_v3_Pipeline.ipynb`, upload the project zip and `city_data.csv`, then **Run all**. Download `citypulse_data.zip` and replace `data/` with its contents.
-- **Local:**
-  ```bash
-  pip install -r pipeline/requirements.txt
-  python pipeline/citypulse_pipeline.py --input city_data.csv --out data
-  ```
 
-### Optional: AI summaries
-Add one key to `.streamlit/secrets.toml` locally, or to **App settings → Secrets** on Streamlit Cloud. Claude, Gemini, Groq and OpenAI-compatible providers are supported:
-
-```toml
-GEMINI_API_KEY = "your-key"   # free tier at aistudio.google.com
-```
-
-Without a key, everything works with data-generated summaries.
-
-### Deploy on Streamlit Community Cloud
-Push the repository to GitHub, go to [share.streamlit.io](https://share.streamlit.io), and click **Create app**. Select the repo, set the main file to `app.py`, choose Python 3.12, and deploy.
-
----
 
 ## Project structure
 
