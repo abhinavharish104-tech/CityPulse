@@ -1,111 +1,222 @@
-# CityPulse — Jaipur's neighbourhoods, one heartbeat each
+<div align="center">
 
-A live civic health dashboard. Rainfall, temperature and air quality (Open-Meteo), traffic congestion and road
-incidents are fused every 5 minutes for five Jaipur neighbourhoods. Three detectors (statistics, Isolation Forest,
-LSTM autoencoder) must agree before anyone is alerted. Every alert comes with its evidence, in plain language,
-framed as a *possible link, not a confirmed cause*.
+# 💗 CityPulse
 
-## Results on the unseen test period (stand-in data; rerun on your real `city_data.csv`)
+### Jaipur's neighbourhoods, one heartbeat each
+
+A live civic health dashboard that fuses weather, air quality, traffic and road incidents into **one pulse per neighbourhood**, and shows the evidence behind every alert.
+
+[![Live app](https://img.shields.io/badge/Live%20app-open-F2B544?style=for-the-badge)](#)
+![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Streamlit-app-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
+![AmiHacks](https://img.shields.io/badge/AmiHacks-Track%20B-E99BBE?style=for-the-badge)
+
+<img src="docs/screenshots/live.png" alt="CityPulse live board: Sindhi Camp flagged as critical while four other neighbourhoods are calm" width="820">
+
+</div>
+
+> **Live app:** paste your `streamlit.app` link here, and in the badge link above.
+
+---
+
+## Why CityPulse
+
+City data already exists, but residents still find out too late. Weather, air quality, traffic and incident feeds live in separate apps. A raw number like "AQI 175" means little unless you know what is normal for that place at that hour. Single-signal alerts fire on every rain shower, so people stop trusting them.
+
+CityPulse answers the question a resident actually has, in about ten seconds:
+
+> **"Is my neighbourhood okay right now, and why?"**
+
+It watches five Jaipur neighbourhoods: Malviya Nagar, Vaishali Nagar, Mansarovar, C-Scheme and Sindhi Camp. For each one it gives a 0–100 pulse, a plain-language headline in English or Hindi, and the evidence behind it. Signals that rise together are always described as a *possible link, not a confirmed cause*.
+
+---
+
+## Features
+
+### 🫀 Live pulse board
+Every neighbourhood gets a scrolling ECG-style heartbeat whose speed and colour reflect its health: calm, watch, disrupted or critical. Above it, one headline explains what is unusual and where, for example *"Air quality (AQI) 175 (usually 89) and road incidents 17 (usually 3) in Sindhi Camp at this hour."* A dark city map, a "last three hours" list and an "allow extra time in" list sit alongside.
+
+### 📈 Live timeline recorder
+Like a hospital monitor, readings are drawn one by one with a moving pen, each against its usual range for that hour. Events shade in as the pen reaches them. You can pause, change speed, go back six hours, or switch between 3 h, 6 h and 24 h windows. A full static chart and a week-long heat strip for all neighbourhoods are also available.
+
+<img src="docs/screenshots/recorder.png" alt="Live timeline recorder drawing rainfall, traffic, incidents, AQI and the combined score" width="820">
+
+### ⏪ Time machine
+Play back the whole week and watch the city's heartbeat change. You can also jump straight to any detected event, or share a link to any moment with `?t=2026-09-23T20:30`. The replay never reveals the future: an ongoing event shows only what is known so far.
+
+### 🔎 Why this score
+For any neighbourhood and moment, this view shows:
+- how the three detectors add up to the combined score
+- how far each feed is from its usual level
+- the checks an alert must pass
+- what would bring the neighbourhood back to calm
+- which feed surprised the sequence model most
+
+<img src="docs/screenshots/why.png" alt="Why this score: detector breakdown, checks before alerting, and what would bring it back to calm" width="820">
+
+### 🚨 Events with evidence
+Every event card shows where and when it happened, its severity, how many minutes it took to confirm, the readings that were unusual, and which detectors independently agreed. You can replay it, get a plain-words explanation, or download it as a report.
+
+<img src="docs/screenshots/event.png" alt="Event card: heavy rain with traffic disruption, with evidence and severity" width="820">
+
+### 🎛️ What-if simulator
+Drag rainfall, traffic, incidents or AQI and watch the detectors re-score live, with the new pulse, state and agreement shown against the actual reading.
+
+### 📣 Citizen reports
+Residents can report an accident, waterlogging, a broken signal, smoke or a blocked road. Each report flows into that neighbourhood's incident feed, and you can watch it move the pulse. Phone numbers and email addresses are stripped automatically, and reports stay in the browser session.
+
+### 💬 Ask CityPulse
+Ask a question in plain language, such as *"Is it a good time to drive through Sindhi Camp?"*, *"What happened this week?"* or *"How does CityPulse decide?"*. Answers are grounded in the live data. When an AI model is connected, every number in its reply is checked against the data; if anything doesn't match, CityPulse answers from the data directly.
+
+<img src="docs/screenshots/ask.png" alt="Ask CityPulse chat listing confirmed events" width="820">
+
+### 🔔 Alerts
+Follow the neighbourhoods you care about and pick the level to be alerted from. During playback a notification pops up when your area crosses that level, and the full alert log can be downloaded as CSV.
+
+### 📡 Feed-outage test
+Switch off any feed from the sidebar. Every reading was also scored with that feed removed, so the pulse keeps working with lower stated confidence, for example "3 of 4 feeds live, confidence 75%".
+
+### 🌐 Built for everyone
+- **Resident view** for a clean, plain-language experience.
+- **City operations view** adds detector scores, severity drivers and per-event model detail.
+- **Hindi summaries** are available from the sidebar.
+- **Accessibility:** colour is never the only signal, since every state also has a word and an icon, and animations respect reduced-motion settings.
+
+---
+
+## How it works
+
+<img src="docs/architecture.png" alt="Architecture: data sources, fusion, three detectors, decision layer, experience; offline pipeline, data contract, online app" width="900">
+
+1. **Fuse.** Hourly rainfall, temperature and AQI (Open-Meteo) and 5-minute traffic and incident feeds are aligned into one table per neighbourhood every 5 minutes. Incidents become a rolling 30-minute count.
+2. **Compare with typical.** For every neighbourhood and hour of day, a robust baseline (median and 1.4826 × MAD) is learned from training days only. Each reading becomes "how far above normal is this, for this place, at this hour".
+3. **Detect three ways.**
+   - A **statistical check** against the baseline. Rain on its own is down-weighted, because rain is weather, not a civic problem.
+   - An **Isolation Forest** on the deviations and their 15-minute change.
+   - An **LSTM autoencoder** that learned how each neighbourhood normally changes over an hour, scored on the most recent 15 minutes.
+4. **Decide carefully.** A neighbourhood is flagged only when the combined score is high, **at least two of the three detectors agree**, and the disruption lasts **two readings in a row**. Nearby neighbourhoods disrupted at the same time merge into one city event with a 0–100 severity.
+5. **Explain.** The dashboard turns the evidence into plain language, framing co-occurring signals as a possible link. An optional AI layer rewrites summaries, but only with figures that pass a number-by-number check against the data.
+
+### Engineering decisions
+
+| Decision | Why it matters |
+|---|---|
+| Baseline per place **and** hour | "17 incidents" is alarming at night and ordinary at rush hour. |
+| Two of three detectors must agree | A single detector either misses events or cries wolf. |
+| Calibrated without peeking | Chronological 60/20/20 split. Weights and thresholds are chosen on validation days, frozen, then run **once** on unseen test days. |
+| Heavy work offline, light app online | The app reads a small data contract, so it needs no TensorFlow and starts fast. |
+| Every feed also scored "switched off" | The outage switch shows real re-scored results, not a cosmetic change. |
+| AI figures verified | Any number an AI model writes must exist in the data, or the answer falls back to a data-generated one. |
+
+---
+
+## Results
+
+Measured on test days the models never saw, with injected scenarios and decoys:
 
 | | Statistics alone | Isolation Forest alone | LSTM alone | **CityPulse (2 of 3 agree)** |
-|---|---|---|---|---|
-| Events caught | 100% | 75% | 75% | **100% (4 / 4)** |
+|---|:-:|:-:|:-:|:-:|
+| Events caught | 100% | 75% | 75% | **4 / 4** |
 | False alarms per day | 5.8 | 2.2 | 1.4 | **0** |
 
-Decoys ignored: 2 / 2. Average time to confirm: 18 min (first warning 0–15 min). Row PR-AUC 0.84.
+| Metric | Value |
+|---|---|
+| Decoys ignored (busy but normal moments) | 2 / 2 |
+| Average time to confirm an event | about 18 minutes |
+| First warning | 0–15 minutes after onset |
+| Row-level PR-AUC (combined score) | 0.84 |
 
-## Project layout
+Each detector alone either misses events or raises false alarms. Requiring agreement keeps every event and removes the false alarms.
 
-```
-app.py                      Streamlit dashboard (no TensorFlow needed)
-citypulse_core.py           Scoring maths shared by pipeline and app (single source of truth)
-cp_ui.py                    Theme CSS + ECG monitor, hero and card components
-cp_llm.py                   Grounded AI summaries (Claude / Gemini / Groq / OpenAI) with number checking
-data/                       Output of the pipeline: scored.csv, events.json, model_meta.json, iso_train.csv
-pipeline/
-  citypulse_pipeline.py     Train -> calibrate on validation -> evaluate on test -> export data/
-  CityPulse_v3_Pipeline.ipynb   Colab wrapper for the pipeline, with plots
-  make_sample_data.py       Offline stand-in for city_data.csv (same generator as the Core Engine)
-.streamlit/config.toml      Theme
-.streamlit/secrets.toml.example
-```
+> Metrics measure detection of injected scenarios and are not a claim of real-world accuracy. Re-run the pipeline on your own `city_data.csv` and update this table with your numbers.
 
-## 1. Rebuild `data/` from your real `city_data.csv` (do this first)
+---
 
-The `data/` folder shipped here was built from a simulated stand-in so the app runs out of the box; the dashboard
-says so in its source line. To use your real Open-Meteo data:
-
-- **Colab:** open `pipeline/CityPulse_v3_Pipeline.ipynb`, run all, upload `city_data.csv`, download
-  `citypulse_data.zip`, and replace `data/` with its contents.
-- **Local:** `pip install -r pipeline/requirements.txt`, then
-  `python pipeline/citypulse_pipeline.py --input city_data.csv --out data`
-
-Thresholds and weights are re-learned from your data, so your numbers will differ slightly from the table above.
-Put the new numbers on your slides.
-
-## 2. Run locally
+## Quick start
 
 ```bash
+git clone <your-repo-url> citypulse
+cd citypulse
 pip install -r requirements.txt
 streamlit run app.py
 ```
 
-Open a specific moment directly: `http://localhost:8501/?t=2026-09-23T20:30`
+Open `http://localhost:8501`. To try it:
+1. In the sidebar, click **Wed 23 Sep, 20:00 Sindhi Camp**.
+2. Turn on **Play the week**.
+3. Open the **Timeline** tab.
 
-## 3. Deploy on Streamlit Community Cloud
+### Rebuild the detector on real data
+The shipped `data/` folder lets the app run immediately. To retrain on the real Open-Meteo dataset:
+- **Colab (recommended):** open `pipeline/CityPulse_v3_Pipeline.ipynb`, upload the project zip and `city_data.csv`, then **Run all**. Download `citypulse_data.zip` and replace `data/` with its contents.
+- **Local:**
+  ```bash
+  pip install -r pipeline/requirements.txt
+  python pipeline/citypulse_pipeline.py --input city_data.csv --out data
+  ```
 
-1. Push this folder to a public GitHub repo, including `data/`. Never commit `secrets.toml`; `.gitignore`
-   already excludes it.
-2. Go to share.streamlit.io, click **Create app**, pick the repo and branch, and set the main file to `app.py`.
-   Under *Advanced settings*, choose Python 3.12.
-3. (Optional, for AI summaries) Under *Advanced settings → Secrets*, paste one key, for example
-   `GEMINI_API_KEY = "..."`. See `.streamlit/secrets.toml.example`.
-4. Deploy. Open the app once before judging starts so it is awake; free apps sleep after inactivity.
+### Optional: AI summaries
+Add one key to `.streamlit/secrets.toml` locally, or to **App settings → Secrets** on Streamlit Cloud. Claude, Gemini, Groq and OpenAI-compatible providers are supported:
 
-Without a key, everything works using data-grounded template summaries.
+```toml
+GEMINI_API_KEY = "your-key"   # free tier at aistudio.google.com
+```
 
-## Features
+Without a key, everything works with data-generated summaries.
 
-- **Right now:** a vital-signs monitor. Each neighbourhood gets a live ECG trace whose speed and colour reflect its
-  health, plus a 0–100 pulse, the reason in one line, a dark map, the last three hours, and places to avoid.
-- **Plain-language headline:** in English or Hindi. It uses a template, or an AI summary whose every number is
-  checked against the data.
-- **Time machine:** play the week, jump to any event, or share a link to any moment. The replay never shows the
-  future: ongoing events show only what is known so far.
-- **Timeline:** each feed against its usual range for that hour, the combined score with alert bands, and a
-  week-long heat strip for every neighbourhood.
-- **Events:** evidence, severity, minutes to confirm, which detectors agreed, a replay button, an AI explanation,
-  and a Markdown download.
-- **Why this score:** how the three detectors add up, each feed's distance from usual, the checks an alert must
-  pass, what would bring the neighbourhood back to calm, and the feed that surprised the LSTM most.
-- **What if:** drag readings and watch statistics and the Isolation Forest re-score live.
-- **Report a problem:** citizen reports enter the incident feed and move the pulse. Phone numbers and emails are
-  stripped, and nothing is stored beyond the session.
-- **Ask CityPulse:** a chat grounded in current readings, events and the method, with a rule-based fallback.
-- **Alerts:** follow neighbourhoods at a chosen level, with pop-up notifications during replay and a CSV log.
-- **Feed outage:** switch off any feed and every score is replaced by one precomputed by all three detectors
-  without it.
-- **City operations mode:** detector channels, severity drivers and LSTM attribution per event.
-- **How it works:** the ablation chart, per-scenario detection times, and a downloadable model card.
+### Deploy on Streamlit Community Cloud
+Push the repository to GitHub, go to [share.streamlit.io](https://share.streamlit.io), and click **Create app**. Select the repo, set the main file to `app.py`, choose Python 3.12, and deploy.
 
-## Demo script (3 minutes)
+---
 
-1. **Problem (20 s).** Feeds are siloed, so residents find out after they are stuck.
-2. **Glance test (30 s).** Open the app on a calm moment and read the headline aloud. Then press the sidebar event
-   *Wed 23 Sep, 20:00 Sindhi Camp* and **Play the week**. The Sindhi Camp trace speeds up and turns red, the
-   headline changes, and the alert toast fires.
-3. **Why (40 s).** Open the *Why this score* tab. Walk through the three detectors adding up, the checks, and what
-   would bring it back to calm. Then open *Events*: evidence, "confirmed 5 min after it began", and the
-   possible-link caveat.
-4. **Robustness (30 s).** In the sidebar set *Traffic congestion offline*. The pulse keeps working and the
-   confidence drops. Then file a citizen report in a calm neighbourhood and watch its pulse move.
-5. **Proof (40 s).** Open *How it works*. Each detector alone raises 1.4–5.8 false alarms a day; requiring agreement
-   brings that to zero while still catching every event. Calibrated on validation, run once on test.
-6. **Impact (20 s).** Resident view, city-ops mode, and Hindi. It can be extended to real 311, transit or
-   power-outage feeds by adding a column.
+## Project structure
 
-## Honesty notes
+```
+app.py                      Streamlit dashboard
+citypulse_core.py           Shared scoring maths (single source of truth for pipeline and app)
+cp_ui.py                    Theme, heartbeat monitor, hero and card components
+cp_recorder.py              Live timeline recorder (runs in the browser)
+cp_llm.py                   Grounded AI summaries with number checking
+data/                       Detector output: scored.csv, events.json, model_meta.json, iso_train.csv
+pipeline/
+  citypulse_pipeline.py     Train, calibrate on validation, evaluate on test, export data/
+  CityPulse_v3_Pipeline.ipynb   Colab notebook for the pipeline
+  make_sample_data.py       Offline stand-in generator for city_data.csv
+docs/                       Architecture diagram and screenshots
+.streamlit/                 Theme and secrets template
+```
 
-Rainfall, temperature and AQI come from Open-Meteo (real) when you run the pipeline on your `city_data.csv`.
-Traffic, incidents, the 7 labelled scenarios and the 4 decoys are simulated and labelled as such. Metrics measure
-detection of injected scenarios and do not claim real-world accuracy. No personal data is used.
+## Tech stack
+
+Python, pandas, NumPy, scikit-learn (Isolation Forest), TensorFlow/Keras (LSTM autoencoder, offline only), Streamlit, Plotly, pydeck (deck.gl + CARTO map), Open-Meteo APIs, and optional LLM providers (Claude, Gemini, Groq, OpenAI).
+
+## Future scope
+
+- Replace the simulated traffic and incident feeds with live city sensors and Rajasthan Sampark (181) complaints.
+- Cover every Jaipur ward, then other Rajasthan cities.
+- Send alerts over WhatsApp, SMS and push, in Hindi and English.
+- Add power cuts, water supply, waste collection and heat stress as civic signals.
+- Forecast the next hour's pulse from weather forecasts.
+- Build a city operations console to assign, acknowledge and resolve events.
+
+## Data and honesty
+
+Rainfall, temperature and AQI come from **Open-Meteo** (real) when the pipeline is run on the project's `city_data.csv`. Traffic congestion, road incidents, the labelled scenarios and the decoys are **simulated**, and the dashboard says so on screen. No personal data is collected.
+
+---
+
+<div align="center">
+
+### Created by Team Neutral Navigators
+
+**Abhinav Harish** (Team Leader) · **Samdrisht** · **Paridhi**
+
+| Member | Role | Contributions |
+|---|---|---|
+| Abhinav Harish | Team Leader | Project lead and system architecture, data-fusion layer and Open-Meteo integration, GitHub and Streamlit Cloud deployment, demo coordination |
+| Samdrisht | Member | Dashboard UI design and build: heartbeat monitor, live map, timeline recorder, replay, alerts and citizen reports |
+| Paridhi | Member | Problem research, demo scenarios and end-to-end testing, plain-language and Hindi text, documentation and presentation |
+
+Built for **AmiHacks**, Track B: Live Civic Health Dashboard.
+
+</div>
