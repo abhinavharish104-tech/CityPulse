@@ -8,7 +8,7 @@ A live civic health dashboard that fuses weather, air quality, traffic and road 
 
 [![Live app](https://img.shields.io/badge/Live%20app-open-F2B544?style=for-the-badge)](https://citypulse-asp.streamlit.app/)
 ![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![Streamlit](https://img.shields.io/badge/Streamlit-app-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)(https://citypulse-asp.streamlit.app/)
+![Streamlit](https://img.shields.io/badge/Streamlit-app-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
 ![AmiHacks](https://img.shields.io/badge/AmiHacks-Track%20B-E99BBE?style=for-the-badge)
 
 <img src="docs/screenshots/live.png" alt="CityPulse live board: Sindhi Camp flagged as critical while four other neighbourhoods are calm" width="820">
