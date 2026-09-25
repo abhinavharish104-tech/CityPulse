@@ -15,7 +15,7 @@ A live civic health dashboard that fuses weather, air quality, traffic and road 
 
 </div>
 
-> **Live app:** paste your `streamlit.app` link here, and in the badge link above.
+> **Live app:**(https://citypulse-asp.streamlit.app/)
 
 ---
 
