@@ -224,16 +224,27 @@ def _slider_moved():
     ss.t_idx = ss.t_slider
 
 
-if not ss.playing:
+def _pause():
+    ss.playing = False
+    ss._full_rerun = True
+
+
+if not ss.playing:  # while playing, the moving tape inside the live board replaces the slider
     ss.t_slider = ss.t_idx
-st.select_slider("Replay time", options=list(range(N)), key="t_slider", on_change=_slider_moved,
-                 format_func=lambda i: pd.Timestamp(TS[i]).strftime("%a %d %b %Y, %H:%M"),
-                 label_visibility="collapsed", disabled=ss.playing)
+    st.select_slider("Replay time", options=list(range(N)), key="t_slider", on_change=_slider_moved,
+                     format_func=lambda i: pd.Timestamp(TS[i]).strftime("%a %d %b %Y, %H:%M"),
+                     label_visibility="collapsed")
+TS_IDX = pd.DatetimeIndex(TS)
+EVENT_MARKS = [(float(TS_IDX.searchsorted(e["start"]) / max(N - 1, 1)), ui.STATE[e["peak_state"]]) for e in EVENTS]
+
+# one fast lookup per tick instead of filtering 10,000 rows
+VT = V.set_index(["timestamp", "zone_id"]).sort_index()
+ZORDER = list(ZONES.zone_id)
 
 
 def snap_at(i):
     now = pd.Timestamp(TS[i])
-    return now, V[V.timestamp == now].set_index("zone_id").loc[ZONES.zone_id]
+    return now, VT.loc[now].reindex(ZORDER)
 
 
 NOW, snap = snap_at(ss.t_idx)
@@ -343,9 +354,17 @@ ops = mode == "City operations"
 @st.fragment(run_every=PLAY_EVERY if ss.playing else None)
 def live_board():
     """Hero + vital monitor + map. While playing only this fragment re-runs, not the page."""
+    if ss.pop("_full_rerun", False):   # Pause pressed inside the board: stop the timer, refresh everything
+        st.rerun()
     if ss.playing:
         ss.t_idx = (ss.t_idx + ss.get("speed", 1)) % N
     now, snap = snap_at(ss.t_idx)
+    if ss.playing:
+        frac = ss.t_idx / max(N - 1, 1)
+        c1, c2 = st.columns([10, 1.4], vertical_alignment="center")
+        c1.markdown(ui.tape(frac, f"{now:%a %d %b, %H:%M}", [m for m in EVENT_MARKS if m[0] <= frac + 1e-9]),
+                    unsafe_allow_html=True)
+        c2.button("❚❚ Pause", key="pause_btn", on_click=_pause, type="primary", width="stretch")
     head, sub, hstate = template_summary(snap, lang)
     ai_used = False
     if hstate != "Normal" and not ss.playing:
@@ -358,7 +377,7 @@ def live_board():
             sub, ai_used = txt, True
     city_pulse = int(round(snap.pulse_v.mean()))
     conf = T["feeds_all"] if not outage else T["feeds_some"].format(n=3, c=75)
-    when = f"{now:%A %d %B, %H:%M}" + ("   ▶ playing the week" if ss.playing else "")
+    when = f"{now:%A %d %B, %H:%M}"
     st.markdown(ui.hero(head, sub, when, city_pulse, hstate, conf, ai_used), unsafe_allow_html=True)
     st.markdown(f'<div class="source">Rainfall, temperature and AQI: <b>{ui.esc(META["data_source"])}</b>. '
                 f'Traffic, incidents and all labelled events: <b>simulated</b>.'
@@ -407,7 +426,7 @@ def live_board():
             "lstm_score": "LSTM", "strong_v": "channels agreeing", "warning_run": "readings in a row"}).round(3),
             hide_index=True, width="stretch")
     if ss.playing:
-        st.caption("The week is playing. The tabs below refresh when you pause.")
+        st.caption("The tabs below catch up when you pause.")
 
 
 live_board()
