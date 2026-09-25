@@ -151,7 +151,8 @@ function frame(){
     el.className = 'cell' + (hot?' hot':''); el.style.color = hot ? D.colors.Watch : '';
     document.getElementById('v'+k).textContent = f.offline ? 'offline' : fmt(f, f.v[cur]);
     document.getElementById('v'+k).style.color = hot ? D.colors.Watch : '__TEXT__';
-    document.getElementById('u'+k).textContent = 'usually ' + fmt(f, f.typ[cur]);
+    const z = f.z[cur], w = z < 1 ? 'normal' : z < 2 ? 'a little high' : z < 3 ? 'high' : z < 5 ? 'very high' : 'extreme';
+    document.getElementById('u'+k).textContent = f.offline ? '' : 'usually ' + fmt(f, f.typ[cur]) + ', now ' + w;
   });
   document.getElementById('v4').textContent = Math.round(D.h[cur]); document.getElementById('v4').style.color = col;
   document.getElementById('u4').textContent = 'alert levels ' + Math.round(D.thr.watch) + ' / ' + Math.round(D.thr.confirmed) + ' / ' + Math.round(D.thr.critical);
